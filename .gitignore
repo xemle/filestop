@@ -4,3 +4,4 @@ node_modules
 .idea/workspace.xml
 .*.swp
 server/controllers/uploads/
+uploads/
