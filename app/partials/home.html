@@ -1,5 +1,38 @@
 <div class="hero-unit" ng-controller="homeCtrl">
     <h1>FileStop</h1>
-    <p>Ever wondered how to easily share large files with your peers? FileStop is the solution for these problems. Start a new FileStop, drag and drop your files and then just share the URL with your friends.</p>
-    <p><button ng-click="newFilestop()" class="btn btn-primary btn-large">Start a new FileStop &raquo;</button></p>
+
+    <p>Ever wondered how to easily share large files with your peers? FileStop is the solution for these problems. Start
+        a new FileStop, drag and drop your files and then just share the URL with your friends.</p>
+
+    <p>
+        <button ng-click="newFilestop()" class="btn btn-primary btn-large">Start a new FileStop &raquo;</button>
+    </p>
 </div>
+
+<hr>
+
+<div class="row-fluid" ng-controller="homeCtrl">
+    <div class="span5">
+        <h2>FileStops</h2>
+
+        <table class="table .table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>created on</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="filestop in filestops">
+                    <td>{{filestop._id}}</td>
+                    <td>{{filestop.created}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <div class="span5">
+        <h2>Files</h2>
+
+
+    </div>
