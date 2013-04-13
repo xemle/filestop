@@ -103,7 +103,7 @@ module.exports = function (config) {
                         return;
                     }
 
-                    if (chunk == chunks - 1) {
+                    if (chunk == chunks) {
                         fs.rename(filePathPart, filePath, function (err) {
                             fs.stat(filePath, function (err, stats) {
                                 var filesize = stats.size;
