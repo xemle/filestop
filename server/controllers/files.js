@@ -11,6 +11,16 @@ exports.create = function(req, res) {
         }
     });
 };
+exports.get = function(req, res, next) {
+    var id = req.params.id;
+    File.findOne({_id: id}, function (err, result) {
+        if (!result) {
+            console.log("File with " + id + " not found");
+            res.send(null);
+        }
+        res.send(result);
+    });
+};
 exports.findAll = function(req, res) {
     File.find().exec(function (err, result) {
         res.send(result);
