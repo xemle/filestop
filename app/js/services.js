@@ -35,11 +35,11 @@ angular.module('filestop').factory('uploader', function() {
             flash_swf_url: 'js/plupload/plupload.flash.swf'
         });
         uploader.bind('Init', service.init);
+        uploader.init();
         uploader.bind('FilesAdded', function(up, files) {
             console.log('' + files.length + ' files were added');
             up.start();
         });
-        uploader.init();
         _uploaders.push(uploader);
         return uploader;
     };

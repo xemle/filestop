@@ -77,5 +77,7 @@ angular.module('filestop.controllers', []).
         $scope.readFilestop();
         $scope.readRecentFiles();
 
-        var up = uploader.create($routeParams.id);
+        if (!$scope.uploader) {
+            $scope.uploader = uploader.create($routeParams.id);
+        }
     }]);

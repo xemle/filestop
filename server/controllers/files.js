@@ -110,8 +110,6 @@ module.exports = function (config) {
                     }
                 });
             });
-
-
         });
     };
     return exports;
