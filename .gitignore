@@ -3,3 +3,4 @@ node_modules
 !.gitkeep
 .idea/workspace.xml
 .*.swp
+server/controllers/uploads/
