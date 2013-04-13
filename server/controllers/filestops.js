@@ -36,6 +36,20 @@ exports.update = function(req, res, next) {
 exports.delete = function(req, res, next) {
     var id = req.params.id;
 
+    // delete all files
+    File.find({filestop: id}, function (err, result) {
+        if (err) {
+            console.log("Error querying for files of filestop " + id, err);
+            return res.send({success: false, errors: "Error querying for files of filestop " + id});
+        }
+        if (result) {
+            result.forEach (function (file) {
+                file.deleteFile();
+                file.remove();
+            });
+        }
+    });
+
     Filestop.findByIdAndRemove(id, function (err, filestop) {
         if (err) {
             console.log("Error deleting Filestop with id " + id + ": " + err);

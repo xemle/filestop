@@ -46,15 +46,8 @@ module.exports = function (config) {
             }
 
             if (file) {
-                var filePath = config.uploadDir + "/" + file.filestop + "/" + file.filename;
-                console.log("Deleting file at " + filePath);
-                fs.unlink(filePath, function (err) {
-                    if (err) {
-                        console.log("Error deleting file " + filePath, err);
-                        res.send({success: false, errors: err});
-                        return;
-                    }
-                });
+                file.deleteFile();
+
                 res.send({success: 'OK', id: id});
             } else {
                 console.log("Error deleting File with id " + id + ": not found");
@@ -107,7 +100,9 @@ module.exports = function (config) {
                         fs.rename(filePathPart, filePath, function (err) {
                             fs.stat(filePath, function (err, stats) {
                                 var filesize = stats.size;
+
                                 var file = new File({filestop: filestopId, filename: req.body.name, size: filesize});
+
                                 file.save(function (err) {
                                     if (!err) {
                                         res.send({success: "OK", file: file});
