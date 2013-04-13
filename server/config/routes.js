@@ -1,6 +1,6 @@
-module.exports = function (app) {
+module.exports = function (app, config) {
 
-    var files = require('../controllers/files');
+    var files = require('../controllers/files')(config);
     app.get('/files/:id', files.get);
     app.get('/files', files.findAll);
     app.post('/files', files.create);

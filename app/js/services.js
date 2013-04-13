@@ -30,7 +30,6 @@ angular.module('filestop').factory('uploader', function() {
             url: 'files/upload',
             multipart: true,
             multipart_params : {
-                _method: 'PUT',
                 filestopId: filestopId
             },
             flash_swf_url: 'js/plupload/plupload.flash.swf'
