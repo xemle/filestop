@@ -5,7 +5,7 @@ var mongoose = require('mongoose'),
 filestopSchema = new Schema({
     name: { type: String, validate: [function(value) {
         return value && value.length > 3;
-    }, "Filename is to short"], default: "Unnamed" },
+    }, "Name is to short"], default: "Unnamed" },
     created: { type: Date, default: Date.now },
     updated: { type: Date, default: Date.now },
     expires: { type: Date, default: Date.now }
