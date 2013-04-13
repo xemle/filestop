@@ -1,7 +1,6 @@
 'use strict';
 
 /* Controllers */
-
 angular.module('filestop.controllers', []).
     controller('homeCtrl', ["$scope", "$location", "$http", "filestopDAO", function ($scope, $location, $http, filestopDAO) {
 
@@ -47,7 +46,7 @@ angular.module('filestop.controllers', []).
             return $routeParams.id;
         };
 
-        $scope.readFilestop = function() {
+        $scope.readFilestop = function () {
             var id = $routeParams.id;
             console.log('reading filestop ' + id);
             // TODO move this to the service provider
@@ -60,10 +59,6 @@ angular.module('filestop.controllers', []).
                     alert(status + data);
                 });
         }
-<<<<<<< HEAD
-        var up = uploader.create($routeParams.id);
-    }]);
-=======
 
         $scope.readRecentFiles = function () {
             console.log('reading files');
@@ -81,5 +76,6 @@ angular.module('filestop.controllers', []).
         // load the data
         $scope.readFilestop();
         $scope.readRecentFiles();
+
+        var up = uploader.create($routeParams.id);
     }]);
->>>>>>> update of the filestop view
