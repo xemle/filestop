@@ -16,6 +16,6 @@ var app = express();
 require('./config/express')(app, config);
 require('./config/routes')(app, config);
 
-app.listen(8000, function(){
-    console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
+app.listen(config.port, function(){
+    console.log("Filestop server listening on port %d in %s mode", this.address().port, env);
 });

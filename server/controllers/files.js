@@ -11,7 +11,7 @@ exports.create = function(req, res) {
         }
     });
 };
-exports.get = function(req, res, next) {
+exports.get = function(req, res) {
     var id = req.params.id;
     File.findOne({_id: id}, function (err, result) {
         if (!result) {
