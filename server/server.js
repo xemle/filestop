@@ -1,4 +1,6 @@
-var express = require('express');
+var express = require('express'),
+    files = require('./routes/files');
+
 var app = express();
 
 app.configure(function() {
@@ -11,6 +13,12 @@ app.configure(function() {
     app.use(express.logger());
     app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
+
+app.get('/files', files.findAll);
+app.get('/files/:id', files.findById);
+app.post('/files', files.add);
+app.put('/files/:id', files.update);
+app.delete('/files/:id', files.delete);
 
 app.get('/api', function(req, res){
     res.send('hello world');
