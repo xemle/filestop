@@ -10,8 +10,7 @@ angular.module('filestop.controllers', []).
             $http({method: 'POST', url: '/filestops'}).
                 success(function(data, status, headers, config) {
                     console.log('redirecting to the new filestop');
-                    alert(data);
-                    $location.path('/filestop/' + '4711');
+                    $location.path('/filestop/' + data.id);
                 }).
                 error(function(data, status, headers, config) {
                     console.log('error while creating filestop');

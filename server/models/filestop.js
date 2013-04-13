@@ -3,7 +3,7 @@ var mongoose = require('mongoose'),
     filestopSchema;
 
 filestopSchema = new Schema({
-    name: { required: true, type: String, validate: [function(value) {
+    name: { type: String, validate: [function(value) {
         return value && value.length > 3;
     }, "Filename is to short"] },
     created: { type: Date, default: Date.now },
