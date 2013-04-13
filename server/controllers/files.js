@@ -11,6 +11,44 @@ exports.create = function(req, res) {
         }
     });
 };
+exports.update = function(req, res, next) {
+    var id = req.params.id;
+
+    req.body.updated = new Date;
+
+    File.findByIdAndUpdate (id, {$set: req.body}, function (err, file) {
+        if (err) {
+            console.log("Error updating File with id " + id + ": " + err);
+            res.send({success: false, errors: err});
+            return;
+        }
+
+        if (file)
+            res.send({success: 'OK', id: file._id});
+        else {
+            console.log("Error updating File with id " + id + ": not found");
+            res.send({success: false, errors: "File not found"});
+        }
+    });
+};
+exports.delete = function(req, res, next) {
+    var id = req.params.id;
+
+    File.findByIdAndRemove(id, function (err, file) {
+        if (err) {
+            console.log("Error deleting File with id " + id + ": " + err);
+            res.send({success: false, errors: err});
+            return;
+        }
+
+        if (file)
+            res.send({success: 'OK', id: id});
+        else {
+            console.log("Error deleting File with id " + id + ": not found");
+            res.send({success: false, errors: "File not found"});
+        }
+    });
+};
 exports.get = function(req, res) {
     var id = req.params.id;
     File.findOne({_id: id}, function (err, result) {

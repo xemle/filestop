@@ -9,7 +9,7 @@ exports.create = function(req, res) {
         if (err) {
             res.send({success: false, errors: err});
         } else {
-            res.send({success: 'OK', id: file._id});
+            res.send({success: 'OK', id: filestop._id});
         }
     });
 };
@@ -26,7 +26,7 @@ exports.update = function(req, res, next) {
         }
 
         if (filestop)
-            res.send({success: 'OK', filestop: filestop});
+            res.send({success: 'OK', id: filestop._id});
         else {
             console.log("Error updating Filestop with id " + id + ": not found");
             res.send({success: false, errors: "Filestop not found"});
@@ -43,7 +43,12 @@ exports.delete = function(req, res, next) {
             return;
         }
 
-        res.send({success: 'OK', id: id});
+        if (filestop)
+            res.send({success: 'OK', id: id});
+        else {
+            console.log("Error deleting Filestop with id " + id + ": not found");
+            res.send({success: false, errors: "Filestop not found"});
+        }
     });
 };
 exports.get = function(req, res, next) {
