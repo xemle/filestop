@@ -45,3 +45,25 @@ angular.module('filestop').factory('uploader', function() {
     };
     return service;
 });
+
+angular.module('filestop').factory('filestopDAO', function () {
+    var service = {
+        create: function () {
+
+        },
+
+        findAll: function () {
+            $http({method: 'GET', url: '/filestops'})
+                .success(function (data, status, headers, config) {
+                    $scope.filestops = data;
+                }).error(
+                function (data, status, headers, config) {
+                    console.log('error while reading current filestops');
+                    alert(status + data);
+                });
+        }
+
+    };
+
+    return service;
+});
