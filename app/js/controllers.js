@@ -36,10 +36,11 @@ angular.module('filestop.controllers', []).
         $scope.readRecentFilestops();
 
     }])
-    .controller('filestopCtrl', ["$scope", "$routeParams", "$location", "$http", function ($scope, $routeParams, $location, $http) {
+    .controller('filestopCtrl', ["$scope", "$routeParams", "$location", "$http", "uploader", function ($scope, $routeParams, $location, $http, uploader) {
 
 
         $scope.getId = function () {
             return $routeParams.id;
         }
+        var up = uploader.create($routeParams.id);
     }]);

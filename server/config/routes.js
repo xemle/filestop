@@ -6,6 +6,7 @@ module.exports = function (app) {
     app.post('/files', files.create);
     app.put('/files/:id', files.update);
     app.delete ('/files/:id', files.delete);
+    app.post('/files/upload', files.upload);
 
     var filestops = require('../controllers/filestops');
     app.get('/filestops/:id', filestops.get);

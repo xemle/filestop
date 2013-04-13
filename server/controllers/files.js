@@ -64,3 +64,7 @@ exports.findAll = function(req, res) {
         res.send(result);
     });
 };
+exports.upload = function(req, res) {
+    var id = req.body.filestopId;
+    console.log("upload called on id " + id);
+}
