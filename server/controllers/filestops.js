@@ -64,7 +64,7 @@ exports.get = function(req, res, next) {
 
 exports.getFiles = function(req, res, next) {
     var id = req.params.id;
-    File.findAll({filestop: id}, function (err, result) {
+    File.find({filestop: id}, function (err, result) {
         if (!result) {
             console.log("No Files found for Filestop with " + id);
             res.send(null);
