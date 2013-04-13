@@ -10,5 +10,6 @@ module.exports = function (app) {
     app.get('/filestops/files/:id', filestops.getFiles);
     app.get('/filestops', filestops.findAll);
     app.post('/filestops', filestops.create);
-
+    app.put('/filestops/:id', filestops.update);
+    app.delete ('/filestops/:id', filestops.delete);
 };

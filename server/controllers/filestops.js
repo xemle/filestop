@@ -4,13 +4,46 @@ var mongoose = require('mongoose'),
     ;
 
 exports.create = function(req, res) {
-    var file = new Filestop(req.body);
-    file.save(function (err) {
+    var filestop = new Filestop(req.body);
+    filestop.save(function (err) {
         if (err) {
             res.send({success: false, errors: err});
         } else {
             res.send({success: 'OK', id: file._id});
         }
+    });
+};
+exports.update = function(req, res, next) {
+    var id = req.params.id;
+
+    req.body.updated = new Date;
+
+    Filestop.findByIdAndUpdate (id, {$set: req.body}, function (err, filestop) {
+        if (err) {
+            console.log("Error updating Filestop with id " + id + ": " + err);
+            res.send({success: false, errors: err});
+            return;
+        }
+
+        if (filestop)
+            res.send({success: 'OK', filestop: filestop});
+        else {
+            console.log("Error updating Filestop with id " + id + ": not found");
+            res.send({success: false, errors: "Filestop not found"});
+        }
+    });
+};
+exports.delete = function(req, res, next) {
+    var id = req.params.id;
+
+    Filestop.findByIdAndRemove(id, function (err, filestop) {
+        if (err) {
+            console.log("Error deleting Filestop with id " + id + ": " + err);
+            res.send({success: false, errors: err});
+            return;
+        }
+
+        res.send({success: 'OK', id: id});
     });
 };
 exports.get = function(req, res, next) {
