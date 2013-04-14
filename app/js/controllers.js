@@ -36,46 +36,14 @@ angular.module('filestop.controllers', []).
         $scope.readRecentFilestops();
 
     }])
-    .controller('filestopCtrl', ["$scope", "$routeParams", "$location", "$http", "uploader", function ($scope, $routeParams, $location, $http, uploader) {
+    .controller('filestopCtrl', ["$scope", "$routeParams", "$location", "$http", "$resource", "uploader", function ($scope, $routeParams, $location, $http, $resource, uploader) {
+        $scope.filestopApi = $resource('/filestops/:id', {id: $routeParams.id}, {get: {method: 'GET'}});
+        $scope.fileApi = $resource('/filestops/:id/files', {id: $routeParams.id}, {get: {method: 'GET', isArray: true}});
 
-        $scope.filestop = {};
+        $scope.filestop = $scope.filestopApi.get({});
+        $scope.files = $scope.fileApi.get({});
 
-        $scope.files = {};
-
-        $scope.getId = function () {
-            return $routeParams.id;
-        };
-
-        $scope.readFilestop = function () {
-            var id = $routeParams.id;
-            console.log('reading filestop ' + id);
-            // TODO move this to the service provider
-            $http({method: 'GET', url: '/filestops/' + id})
-                .success(function (data, status, headers, config) {
-                    $scope.filestop = data;
-                }).error(
-                function (data, status, headers, config) {
-                    console.log('error while reading filestop ' + id);
-                    alert(status + data);
-                });
-        }
-
-        $scope.readRecentFiles = function () {
-            console.log('reading files');
-            // TODO move this to the service provider
-            $http({method: 'GET', url: '/filestops/' + $routeParams.id + '/files'})
-                .success(function (data, status, headers, config) {
-                    $scope.files = data;
-                }).error(
-                function (data, status, headers, config) {
-                    console.log('error while reading files');
-                    alert(status + data);
-                });
-        };
-
-        // load the data
-        $scope.readFilestop();
-        $scope.readRecentFiles();
+        $scope.id = $routeParams.id;
 
         if (!$scope.uploader) {
             $scope.uploader = uploader.create($routeParams.id);

@@ -3,7 +3,7 @@
         <a href="#" class="btn btn-primary">&laquo; Home</a>
     </div>
     <div class="span10">
-        <h1>FileStop {{filestop._id}}</h1>
+        <h1>FileStop {{id}}</h1>
     </div>
 </div>
 
@@ -15,7 +15,6 @@
         <table class="table .table-condensed">
             <thead>
             <tr>
-                <th>id</th>
                 <th>filename</th>
                 <th>size</th>
                 <th>options</th>
@@ -23,7 +22,6 @@
             </thead>
             <tbody>
             <tr ng-repeat="file in files">
-                <td>{{file._id}}</td>
                 <td>{{file.filename}}</td>
                 <td>{{file.size}}</td>
                 <td>
