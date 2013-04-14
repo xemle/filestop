@@ -1,9 +1,14 @@
 <div class="row-fluid">
-    <div class="span2">
-        <a href="#" class="btn btn-primary">&laquo; Home</a>
+    <div class="span12">
+        <h1>FileStop - <i>{{filestop.name}}</i></h1>
     </div>
-    <div class="span10">
-        <h1>FileStop {{filestop.name}}</h1>
+    <hr>
+</div>
+
+<div class="row-fluid">
+    <div class="span12">
+        <a href="#" class="btn btn-primary">&laquo; Home</a>
+        <a href="#" class="btn btn-danger">Delete FileStop</a>
     </div>
 </div>
 
@@ -39,21 +44,25 @@
         <div class="row-fluid">
             <div>
                 <h2>Information</h2>
+
                 <form class="form-horizontal">
                     <div class="control-group">
                         <label class="control-label" for="filestopName">Name</label>
+
                         <div class="controls">
                             <input type="text" id="filestopName" ng-model="filestop.name">
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label">Created on</label>
+
                         <div class="controls">
                             <label class="control-label">{{filestop.created | date:'MMM d, y hh:mm:ss'}}</label>
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label">Last update</label>
+
                         <div class="controls">
                             <label class="control-label">{{filestop.updated | prettyDate}}</label>
                         </div>
@@ -69,6 +78,7 @@
         <div class="row-fluid">
             <div class="span6">
                 <h2>Dropzone</h2>
+
                 <div class="dropzone" id="dropzone">
                     <i>Drag and drop your files here, we'll do the rest!</i>
                 </div>
