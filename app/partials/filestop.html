@@ -20,6 +20,7 @@
         <table class="table .table-condensed">
             <thead>
             <tr>
+                <th><input ng-click="selectAll()" ng-model="allSelected" type="checkbox" /></th>
                 <th>filename</th>
                 <th>size</th>
                 <th>options</th>
@@ -27,6 +28,7 @@
             </thead>
             <tbody>
             <tr ng-repeat="file in files">
+                <th><input ng-model="file.selected" ng-click="checkSelected()" type="checkbox" /></th>
                 <td><a ng-href="/filestop/{{cid}}/files/{{file.cid}}">{{file.filename}}</a></td>
                 <td>{{file.size | prettySize}}</td>
                 <td>
@@ -37,6 +39,7 @@
             </tr>
             </tbody>
         </table>
+        <button type="button" class="btn" ng-click="downloadSelected()">Download selected</button>
     </div>
 
     <!-- INFO and DROPZONE -->

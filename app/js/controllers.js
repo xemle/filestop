@@ -58,7 +58,8 @@ angular.module('filestop.controllers', []).
         $scope.fileApi = $resource('/filestop/:cid/files/:filecid', {cid: $routeParams.cid},
             {
                 list: {method: 'GET', isArray: true},
-                remove: {method: 'DELETE'}
+                remove: {method: 'DELETE'},
+                downloadAll: {method: 'POST'}
             });
 
         $scope.filestop = $scope.filestopApi.get({});
@@ -86,6 +87,40 @@ angular.module('filestop.controllers', []).
             $scope.filestopApi.update({name: $scope.filestop.name});
         };
 
+        $scope.allSelected = false;
+
+        $scope.selectAll = function() {
+            for (var i in $scope.files) {
+                $scope.files[i].selected = $scope.allSelected;
+            }
+        };
+        $scope.checkSelected = function() {
+            var allSelected = true, allDeselected = false;
+            for (var i in $scope.files) {
+                allSelected = allSelected && $scope.files[i].selected;
+                allDeselected = allDeselected || $scope.files[i].selected;
+            }
+            if (allSelected) {
+                $scope.allSelected = true;
+            } else if (allDeselected) {
+                $scope.allSelected = false;
+            }
+        }
+
+        $scope.downloadSelected = function() {
+            var cids = [];
+            for (var i in $scope.files) {
+                if ($scope.files[i].selected) {
+                    cids.push($scope.files[i].cid);
+                }
+            }
+            if (cids.length > 0) {
+                // work around to trigger download
+                var url = "/filestop/" + $scope.cid + "/files";
+                var inputs = '<input type="hidden" name="fileCids" value="' + cids.join(',') + '"/>';
+                jQuery('<form action="'+ url +'" method="post">'+inputs+'</form>').appendTo('body').submit().remove();
+            }
+        }
         if (!$scope.uploader) {
             $scope.uploader = uploader.create($routeParams.cid);
         } else {

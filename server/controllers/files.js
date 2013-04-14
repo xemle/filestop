@@ -2,7 +2,8 @@ var mongoose = require('mongoose'),
     File = mongoose.model('File'),
     fs = require('fs'),
     mkdirp = require('mkdirp'),
-    mime = require('mime');
+    mime = require('mime'),
+    tinyzip = require('tinyzip');
 
 module.exports = function (config) {
     var exports = {};
@@ -94,6 +95,31 @@ module.exports = function (config) {
 
                 var filestream = fs.createReadStream(file);
                 filestream.pipe(res);
+            }
+        });
+
+    };
+    exports.downloadAll = function (req, res) {
+        var filestop_cid = req.params.cid;
+        var file_cids = req.body.fileCids.split(',');
+        File.find({cid: {$in: file_cids}, filestopCId: filestop_cid}, function (err, result) {
+            if (!result) {
+                console.log("Files with " + file_cids.join(', ') + " not found");
+                res.send(null);
+            } else {
+                var zipFilename = "filestop-" + filestop_cid + ".zip";
+                res.setHeader('Content-disposition', 'attachment; filename=' + zipFilename);
+                res.setHeader('Content-type', 'application/zip');
+                res.setHeader('Transfer-Encoding', 'chunked');
+
+                var rootpath = config.uploadDir + "/" + filestop_cid;
+                var zip = new tinyzip.TinyZip({rootpath: rootpath, utf8: true, compress: {level: 1}, fast: true});
+                for (var i in result) {
+                    var filename = rootpath + "/" + result[i].filename;
+                    zip.addFile({file:filename})
+                }
+                var zipStream = zip.getZipStream();
+                zipStream.pipe(res);
             }
         });
 

@@ -14,6 +14,7 @@ module.exports = function (app, config) {
     app.get('/filestop/:cid/files/:fileCid', files.download);
     app.delete('/filestop/:cid/files/:fileCid', files.delete);
     app.get('/filestop/:cid/files', filestops.getFiles);
+    app.post('/filestop/:cid/files', files.downloadAll);
     app.post('/filestop/:cid/upload', files.upload);
     app.get('/filestop', filestops.findAll);
     app.post('/filestop', filestops.create);
