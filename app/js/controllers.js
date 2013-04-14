@@ -2,10 +2,11 @@
 
 /* Controllers */
 angular.module('filestop.controllers', []).
-    controller('homeCtrl', ["$scope", "$location", "$http", "$resource", function ($scope, $location, $http, $resource) {
-        $scope.filestopApi = $resource('/filestop/', {},
+    controller('homeCtrl', ["$scope", "$location", "$http", "$resource", "$routeParams", function ($scope, $location, $http, $resource, $routeParams) {
+        $scope.filestopApi = $resource('/filestop/:cid', { },
             {
-                list: {method: 'GET', isArray: true}
+                list: {method: 'GET', isArray: true},
+                remove: {method: 'DELETE'}
             });
 
         $scope.filestops = $scope.filestopApi.list();
@@ -13,6 +14,15 @@ angular.module('filestop.controllers', []).
         $scope.removeFilestop = function(cid) {
             console.log('deleting filestop ' + cid);
 
+            $scope.filestopApi.remove({cid: cid}, function() {
+                for (var i = $scope.filestops.length - 1; i >= 0; i--) {
+                    if ($scope.filestops[i].cid == cid) {
+                        $scope.filestops.splice(i, 1);
+                    }
+                }
+            });
+
+            /*
             // TODO move this to the service provider
             $http({method: 'DELETE', url: '/filestop/' + cid})
                 .success(function(data, status, headers, config) {
@@ -21,6 +31,7 @@ angular.module('filestop.controllers', []).
                     console.log('error while deleting filestop' + cid);
                     alert(status + data);
                 });
+                */
         };
 
         $scope.newFilestop = function () {
