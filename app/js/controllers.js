@@ -65,15 +65,31 @@ angular.module('filestop.controllers', []).
     }])
     .controller('filestopCtrl', ["$scope", "$routeParams", "$location", "$http", "$resource", "uploader", function ($scope, $routeParams, $location, $http, $resource, uploader) {
         $scope.filestopApi = $resource('/filestops/:id', {id: $routeParams.id}, {get: {method: 'GET'}});
-        $scope.fileApi = $resource('/filestops/:id/files', {id: $routeParams.id}, {get: {method: 'GET', isArray: true}});
+        $scope.fileApi = $resource('/filestops/:id/files/:fileid', {id: $routeParams.id},
+            {
+                list: {method: 'GET', isArray: true},
+                remove: {method: 'DELETE'}
+            });
 
         $scope.filestop = $scope.filestopApi.get({});
 
-        $scope.loadFiles = function() {
-            $scope.files = $scope.fileApi.get({});
-        };
+        $scope.files = $scope.fileApi.list({});
 
         $scope.id = $routeParams.id;
+
+        $scope.loadFiles = function() {
+            $scope.files = $scope.fileApi.list({});
+        };
+
+        $scope.removeFile = function(fileid) {
+            $scope.fileApi.remove({fileid: fileid}, function() {
+                for (var i = $scope.files.length - 1; i >= 0; i--) {
+                    if ($scope.files[i]._id == fileid) {
+                        $scope.files.splice(i, 1);
+                    }
+                }
+            });
+        }
 
         if (!$scope.uploader) {
             $scope.uploader = uploader.create($routeParams.id);
