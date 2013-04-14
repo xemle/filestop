@@ -8,6 +8,7 @@ fileSchema = new Schema({
     filename: { type: String, validate: [function(value) {
         return value && value.length > 3;
     }, "Filename is to short"] },
+    cid: {type: String},
     filepath: { type: String},
     created: { type: Date, default: Date.now },
     size: { required: true, type: Number, min: 0 },
@@ -15,7 +16,7 @@ fileSchema = new Schema({
 });
 
 fileSchema.methods.deleteFile = function (config) {
-    var filePath = config.uploadPath + "/" + this.filestopCId + "/" + this.filename;
+    var filePath = config.uploadDir + "/" + this.filestopCId + "/" + this.filename;
     console.log("Deleting file at " + filePath);
     fs.unlink(filePath, function (err) {
         if (err) {
