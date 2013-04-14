@@ -10,7 +10,8 @@ module.exports = function (config) {
     exports.create = function(req, res) {
         var filestop = new Filestop(req.body);
 
-        filestop.createClientId(config)
+        filestop.createClientId(config);
+        filestop.url = config.baseURL + "/#/filestop/" + filestop.cid;
 
         filestop.save(function (err) {
             if (err) {
@@ -32,9 +33,10 @@ module.exports = function (config) {
                 return;
             }
 
-            if (filestop)
+            if (filestop) {
+                console.log("Updated Filestop with cid " + cid);
                 res.send({success: 'OK', cid: filestop.cid});
-            else {
+            } else {
                 console.log("Error updating Filestop with cid " + cid + ": not found");
                 res.send({success: false, errors: "Filestop not found"});
             }

@@ -9,6 +9,7 @@ filestopSchema = new Schema({
         return value && value.length > 3;
     }, "Name is to short"], default: "Unnamed" },
     cid: {type: String},
+    url: {type: String},
     created: { type: Date, default: Date.now },
     updated: { type: Date, default: Date.now },
     expires: { type: Date, default: Date.now }
