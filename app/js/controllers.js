@@ -31,7 +31,19 @@ angular.module('filestop.controllers', []).
                     console.log('error while reading current filestops');
                     alert(status + data);
                 });
-        }
+        };
+
+        $scope.removeFilestop = function(id) {
+            console.log('deleting filestop ' + id);
+            // TODO move this to the service provider
+            $http({method: 'DELETE', url: '/filestops/' + id})
+                .success(function(data, status, headers, config) {
+                    $scope.readRecentFilestops();
+                }).error(function(data, status, headers, config) {
+                    console.log('error while deleting filestop' + id);
+                    alert(status + data);
+                });
+        };
 
         $scope.newFilestop = function () {
             console.log('creating new filestop');
