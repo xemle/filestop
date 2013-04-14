@@ -23,7 +23,7 @@
             <tbody>
             <tr ng-repeat="file in files">
                 <td>{{file.filename}}</td>
-                <td>{{file.size}}</td>
+                <td>{{file.size | prettySize}}</td>
                 <td>
                     <button class="btn btn-link" ng-click="removeFile(file._id)">
                         <i class="icon-remove"></i>
