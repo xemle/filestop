@@ -4,6 +4,7 @@
     "private": true,
     "dependencies": {
         "express": "3.0.0",
+        "errno-codes": "1.0.2",
         "mongoose": "3.6.4",
         "mkdirp": "0.3.5",
         "mime": "1.2.9"

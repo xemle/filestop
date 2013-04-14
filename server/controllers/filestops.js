@@ -1,5 +1,6 @@
 var mongoose = require('mongoose'),
     File = mongoose.model('File'),
+    Error = require ("errno-codes"),
     Filestop = mongoose.model('Filestop');
 ;
 
@@ -50,8 +51,16 @@ module.exports = function (config) {
             }
             if (result) {
                 result.forEach (function (file) {
-                    file.deleteFile(config);
-                    file.remove();
+                    file.deleteFile(config, function(err) {
+                        // ENOENT is "File does not exist"
+                        if (err && err.errno != Error.ENOENT) {
+                            res.send({success: 'false', error: err});
+                            return;
+                        }
+
+                        file.remove();
+                    });
+
                 });
             }
         });
@@ -65,11 +74,12 @@ module.exports = function (config) {
 
             if (filestop) {
                 filestop.deleteFolder(config, function (err) {
-                    // errno = 34 means that the folder cannot be found (yay!)
-                    if (err && err.errno != 34) {
+                    // ENOENT is "File does not exist"
+                    if (err && err.errno != Error.ENOENT.errno) {
                         res.send({success: 'false', error: err});
                         return;
                     }
+                    filestop.remove();
                     res.send({success: 'OK', cid: cid});
                     return;
                 });

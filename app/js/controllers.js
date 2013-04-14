@@ -13,14 +13,14 @@ angular.module('filestop.controllers', []).
         $scope.removeFilestop = function(cid) {
             console.log('deleting filestop ' + cid);
 
-            /*// TODO move this to the service provider
+            // TODO move this to the service provider
             $http({method: 'DELETE', url: '/filestop/' + cid})
                 .success(function(data, status, headers, config) {
                     $scope.readRecentFilestops();
                 }).error(function(data, status, headers, config) {
                     console.log('error while deleting filestop' + cid);
                     alert(status + data);
-                });*/
+                });
         };
 
         $scope.newFilestop = function () {

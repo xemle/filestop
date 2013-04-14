@@ -14,14 +14,16 @@ fileSchema = new Schema({
     filestopCId: { required: true, type: String }
 });
 
-fileSchema.methods.deleteFile = function (config) {
+fileSchema.methods.deleteFile = function (config, callback) {
     var filePath = config.uploadDir + "/" + this.filestopCId + "/" + this.filename;
     console.log("Deleting file at " + filePath);
     fs.unlink(filePath, function (err) {
         if (err) {
             console.log("Error deleting file " + filePath, err);
-            return;
         }
+
+        if (typeof(callback) == "function")
+            callback(err);
     });
 }
 
