@@ -1,6 +1,7 @@
 var mongoose = require('mongoose'),
     fs = require('fs'),
     Schema = mongoose.Schema,
+    crypto = require('crypto'),
     fileSchema;
 
 fileSchema = new Schema({
@@ -28,8 +29,8 @@ fileSchema.methods.createClientId = function (config) {
     var shasum = crypto.createHash('sha1');
     this.cid = shasum.update (this._id + config.salt, "ascii")
         .digest("base64")
-        .replace('+','-')
-        .replace('/','_')
+        .replace('+','')
+        .replace('/','')
         .substring(0,12);
 }
 

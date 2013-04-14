@@ -10,7 +10,8 @@ module.exports = function (app, config) {
 
     var filestops = require('../controllers/filestops')(config);
     app.get('/filestop/:cid', filestops.get);
-    app.get('/filestop/files/:cid', filestops.getFiles);
+    app.get('/filestop/:cid/files', filestops.getFiles);
+    app.post('/filestop/:cid/upload', files.upload);
     app.get('/filestop', filestops.findAll);
     app.post('/filestop', filestops.create);
     app.put('/filestop/:cid', filestops.update);

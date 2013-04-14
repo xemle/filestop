@@ -73,7 +73,7 @@ angular.module('filestop').factory('uploader', function($rootScope) {
         uploader.bind('FilesAdded', function(up, files) {
             console.log('' + files.length + ' files were added');
             for (var i in files) {
-                files[i].filestopId = filestopId;
+                files[i].filestopCId = filestopCId;
                 service.files.push(files[i]);
             }
             up.start();
@@ -84,7 +84,7 @@ angular.module('filestop').factory('uploader', function($rootScope) {
         uploader.bind('FileUploaded', function(up, file, response) {
             console.log("File " + file.name + " uploaded", response);
             service.updateProcess();
-            $rootScope.$broadcast('file.upload.complete', filestopId, file);
+            $rootScope.$broadcast('file.upload.complete', filestopCId, file);
         });
         _uploaders.push(uploader);
         return uploader;

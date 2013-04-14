@@ -76,7 +76,7 @@ module.exports = function (config) {
         });
     };
     exports.upload = function (req, res) {
-        var filestop_cid = req.body.filestopCId;
+        var filestop_cid = req.params.cid;
         var chunk = parseInt(req.body.chunk || 0) + 1;
         var chunks = req.body.chunks || 1;
         console.log("upload called on filestop_cid " + filestop_cid + " chunk " + chunk + "/" + chunks);
@@ -111,7 +111,7 @@ module.exports = function (config) {
 
                                 file.save(function (err) {
                                     if (!err) {
-                                        res.send({success: "OK", file: file});
+                                        res.send({success: "OK", cid: file.cid});
                                         return;
                                     }
                                 });

@@ -64,8 +64,8 @@ angular.module('filestop.controllers', []).
 
     }])
     .controller('filestopCtrl', ["$scope", "$routeParams", "$location", "$http", "$resource", "uploader", function ($scope, $routeParams, $location, $http, $resource, uploader) {
-        $scope.filestopApi = $resource('/filestop/:cid', {id: $routeParams.cid}, {get: {method: 'GET'}});
-        $scope.fileApi = $resource('/filestop/:cid/files/:filecid', {id: $routeParams.cid},
+        $scope.filestopApi = $resource('/filestop/:cid', {cid: $routeParams.cid}, {get: {method: 'GET'}});
+        $scope.fileApi = $resource('/filestop/:cid/files/:filecid', {cid: $routeParams.cid},
             {
                 list: {method: 'GET', isArray: true},
                 remove: {method: 'DELETE'}
