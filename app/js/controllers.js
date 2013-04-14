@@ -2,46 +2,25 @@
 
 /* Controllers */
 angular.module('filestop.controllers', []).
-    controller('homeCtrl', ["$scope", "$location", "$http", function ($scope, $location, $http) {
-        $scope.filestops = {};
+    controller('homeCtrl', ["$scope", "$location", "$http", "$resource", function ($scope, $location, $http, $resource) {
+        $scope.filestopApi = $resource('/filestop/', {},
+            {
+                list: {method: 'GET', isArray: true}
+            });
 
-        $scope.files = {};
-
-        $scope.readRecentFilestops = function () {
-            console.log('reading recent filestops');
-            // TODO move this to the service provider
-            $http({method: 'GET', url: '/filestop'})
-                .success(function (data, status, headers, config) {
-                    $scope.filestops = data;
-                }).error(
-                function (data, status, headers, config) {
-                    console.log('error while reading current filestops');
-                    alert(status + data);
-                });
-        };
-
-        $scope.readRecentFiles = function() {
-            console.log('reading recent files');
-            // TODO move this to the service provider
-            $http({method: 'GET', url: '/files'})
-                .success(function(data, status, headers, config) {
-                    $scope.files = data;
-                }).error(function(data, status, headers, config) {
-                    console.log('error while reading current filestops');
-                    alert(status + data);
-                });
-        };
+        $scope.filestops = $scope.filestopApi.list();
 
         $scope.removeFilestop = function(cid) {
             console.log('deleting filestop ' + cid);
-            // TODO move this to the service provider
+
+            /*// TODO move this to the service provider
             $http({method: 'DELETE', url: '/filestop/' + cid})
                 .success(function(data, status, headers, config) {
                     $scope.readRecentFilestops();
                 }).error(function(data, status, headers, config) {
                     console.log('error while deleting filestop' + cid);
                     alert(status + data);
-                });
+                });*/
         };
 
         $scope.newFilestop = function () {
@@ -57,9 +36,6 @@ angular.module('filestop.controllers', []).
                     alert(status + data);
                 });
         };
-
-        $scope.readRecentFilestops();
-        $scope.readRecentFiles();
 
     }])
     .controller('filestopCtrl', ["$scope", "$routeParams", "$location", "$http", "$resource", "uploader", function ($scope, $routeParams, $location, $http, $resource, uploader) {
