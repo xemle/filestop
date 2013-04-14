@@ -80,13 +80,13 @@ module.exports = function (config) {
         });
     };
     exports.upload = function (req, res) {
-        var id = req.body.filestopId;
+        var filestopId = req.params.id;
         var chunk = parseInt(req.body.chunk || 0) + 1;
         var chunks = req.body.chunks || 1;
-        console.log("upload called on id " + id + " chunk " + chunk + "/" + chunks);
+        console.log("upload called on id " + filestopId + " chunk " + chunk + "/" + chunks);
 
         fs.readFile(req.files.file.path, function (err, data) {
-            var fileDir = config.uploadDir + "/" + id + "/";
+            var fileDir = config.uploadDir + "/" + filestopId + "/";
             var filePath = fileDir + req.body.name;
             var filePathPart = filePath + ".part";
             console.log("writing upload to " + filePath);
@@ -107,7 +107,7 @@ module.exports = function (config) {
                         fs.rename(filePathPart, filePath, function (err) {
                             fs.stat(filePath, function (err, stats) {
                                 var filesize = stats.size;
-                                var file = new File({filestop: id, filename: req.body.name, size: filesize});
+                                var file = new File({filestop: filestopId, filename: req.body.name, size: filesize});
                                 file.save(function (err) {
                                     if (!err) {
                                         res.send({success: "OK", file: file});

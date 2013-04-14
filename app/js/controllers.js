@@ -63,7 +63,7 @@ angular.module('filestop.controllers', []).
         $scope.readRecentFiles = function () {
             console.log('reading files');
             // TODO move this to the service provider
-            $http({method: 'GET', url: '/files'})
+            $http({method: 'GET', url: '/filestops/' + $routeParams.id + '/files'})
                 .success(function (data, status, headers, config) {
                     $scope.files = data;
                 }).error(
@@ -79,5 +79,7 @@ angular.module('filestop.controllers', []).
 
         if (!$scope.uploader) {
             $scope.uploader = uploader.create($routeParams.id);
+        } else {
+            uploader.update($scope.uploader);
         }
     }]);

@@ -19,7 +19,7 @@ angular.module('filestop').factory('uploader', function() {
         state: 'IDLE'
     };
     service.init = function(uploader) {
-        var filestopId = uploader.settings.multipart_params.filestopId;
+        var filestopId = uploader.settings.url;
         console.log("Uploader for " + filestopId + " initialized");
         if (uploader.features.dragdrop) {
             service.dnd = true;
@@ -61,12 +61,9 @@ angular.module('filestop').factory('uploader', function() {
             browse_button: 'pickfiles',
             max_file_size: '2000mb',
             chunk_size: '1mb',
-            url: 'files/upload',
+            url: 'filestops/' + filestopId + '/upload',
             drop_element: 'dropzone',
             multipart: true,
-            multipart_params : {
-                filestopId: filestopId
-            },
             flash_swf_url: 'js/plupload/plupload.flash.swf'
         });
         uploader.bind('Init', service.init);
@@ -88,6 +85,9 @@ angular.module('filestop').factory('uploader', function() {
         });
         _uploaders.push(uploader);
         return uploader;
+    };
+    service.update = function(uploader) {
+        plupload.init(uploader);
     };
     return service;
 });
