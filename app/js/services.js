@@ -11,7 +11,12 @@ angular.module('filestop.services', []).
 angular.module('filestop').factory('uploader', function() {
     var _uploaders = [];
     var service = {
-        dnd: false
+        dnd: false,
+        files: [],
+        started: false,
+        estimatedEnd: false,
+        process: 100,
+        state: 'IDLE'
     };
     service.init = function(uploader) {
         var filestopId = uploader.settings.multipart_params.filestopId;
@@ -20,7 +25,36 @@ angular.module('filestop').factory('uploader', function() {
             service.dnd = true;
         }
     };
-
+    service.clear = function() {
+        service.state = 'IDLE';
+        service.process = 100;
+        service.started = false;
+        service.estimatedEnd = false;
+        service.files.splice(0, service.files.length);
+    };
+    service.updateProcess = function() {
+        if (!service.files.length) {
+            return;
+        } else if (!service.started) {
+            service.state = 'UPLOADING';
+            service.started = new Date();
+            service.estimatedEnd = new Date();
+        }
+        var process = 0, clear = true;
+        for (var i in service.files) {
+            process += service.files[i].percent;
+            clear = clear && (service.files[i].percent == 100);
+        }
+        service.process = process / service.files.length;
+        if (clear) {
+            console.log("Uploading of " + service.files.length + " files is done");
+            service.clear();
+        } else {
+            var now = new Date().getTime(), diff = now - service.started.getTime();
+            service.estimatedEnd.setTime(now + diff * (100 - service.process));
+            //console.log("Process is " + service.process + ". Estimated end is " + service.estimatedEnd.toLocaleString());
+        }
+    };
     service.create = function(filestopId) {
         var uploader = new plupload.Uploader({
             runtimes: 'html5,flash',
@@ -39,7 +73,18 @@ angular.module('filestop').factory('uploader', function() {
         uploader.init();
         uploader.bind('FilesAdded', function(up, files) {
             console.log('' + files.length + ' files were added');
+            for (var i in files) {
+                files[i].filestopId = filestopId;
+                service.files.push(files[i]);
+            }
             up.start();
+        });
+        uploader.bind('UploadProgress', function(up, file) {
+            service.updateProcess();
+        });
+        uploader.bind('FileUploaded', function(up, file, response) {
+            console.log("File " + file.name + " uploaded", response);
+            service.updateProcess();
         });
         _uploaders.push(uploader);
         return uploader;
