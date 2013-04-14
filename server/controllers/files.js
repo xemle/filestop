@@ -1,7 +1,8 @@
 var mongoose = require('mongoose'),
     File = mongoose.model('File'),
     fs = require('fs'),
-    mkdirp = require('mkdirp');
+    mkdirp = require('mkdirp'),
+    mime = require('mime');
 
 module.exports = function (config) {
     var exports = {};
@@ -50,7 +51,7 @@ module.exports = function (config) {
             }
 
             if (file) {
-                file.deleteFile();
+                file.deleteFile(config);
 
                 res.send({success: 'OK', cid: file.cid});
             } else {
@@ -75,6 +76,27 @@ module.exports = function (config) {
         File.find().exec(function (err, result) {
             res.send(result);
         });
+    };
+    exports.download = function (req, res) {
+        var filestop_cid = req.params.cid;
+        var file_cid = req.params.fileCid;
+        File.findOne({cid: file_cid, filestopCId: filestop_cid}, function (err, result) {
+            if (!result) {
+                console.log("File with " + file_cid + " not found");
+                res.send(null);
+            } else {
+                var file = config.uploadDir + "/" + filestop_cid + "/" + result.filename;
+                var filename = result.filename;
+                var mimetype = mime.lookup(file);
+
+                res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+                res.setHeader('Content-type', mimetype);
+
+                var filestream = fs.createReadStream(file);
+                filestream.pipe(res);
+            }
+        });
+
     };
     exports.upload = function (req, res) {
         var filestop_cid = req.params.cid;

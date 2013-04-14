@@ -11,6 +11,7 @@ module.exports = function (app, config) {
 
     var filestops = require('../controllers/filestops')(config);
     app.get('/filestop/:cid', filestops.get);
+    app.get('/filestop/:cid/files/:fileCid', files.download);
     app.delete('/filestop/:cid/files/:fileCid', files.delete);
     app.get('/filestop/:cid/files', filestops.getFiles);
     app.post('/filestop/:cid/upload', files.upload);

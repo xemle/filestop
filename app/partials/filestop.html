@@ -22,10 +22,10 @@
             </thead>
             <tbody>
             <tr ng-repeat="file in files">
-                <td>{{file.filename}}</td>
+                <td><a ng-href="/filestop/{{cid}}/files/{{file.cid}}">{{file.filename}}</a></td>
                 <td>{{file.size | prettySize}}</td>
                 <td>
-                    <button class="btn btn-link" ng-click="removeFile(file._id)">
+                    <button class="btn btn-link" ng-click="removeFile(file.cid)">
                         <i class="icon-remove"></i>
                     </button>
                 </td>
