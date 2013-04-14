@@ -10,7 +10,11 @@ angular.module('filestop.filters', []).
     }])
     .filter('prettyDate', function () {
         return function (text, length, end) {
-            return jQuery.timeago(text);
+            if (text) {
+                return jQuery.timeago(text);
+            } else {
+                return text;
+            }
         }
     })
     .filter('prettySize', function () {
