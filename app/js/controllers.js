@@ -39,7 +39,11 @@ angular.module('filestop.controllers', []).
 
     }])
     .controller('filestopCtrl', ["$scope", "$routeParams", "$location", "$http", "$resource", "uploader", function ($scope, $routeParams, $location, $http, $resource, uploader) {
-        $scope.filestopApi = $resource('/filestop/:cid', {cid: $routeParams.cid}, {get: {method: 'GET'}});
+        $scope.filestopApi = $resource('/filestop/:cid', {cid: $routeParams.cid},
+            {
+                get: {method: 'GET'},
+                update: {method: 'PUT'}
+            });
         $scope.fileApi = $resource('/filestop/:cid/files/:filecid', {cid: $routeParams.cid},
             {
                 list: {method: 'GET', isArray: true},
@@ -64,7 +68,12 @@ angular.module('filestop.controllers', []).
                     }
                 }
             });
-        }
+        };
+
+        $scope.updateFilestop = function() {
+            console.log('updating filestop');
+            $scope.filestopApi.update({name: $scope.filestop.name});
+        };
 
         if (!$scope.uploader) {
             $scope.uploader = uploader.create($routeParams.cid);
