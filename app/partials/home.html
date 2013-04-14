@@ -27,7 +27,7 @@
             <td><a href="/#/filestop/{{filestop.cid}}">{{filestop.name}}</a></td>
             <td>{{filestop.created | prettyDate}}</td>
             <td>
-                <button class="btn btn-link" ng-click="removeFilestop(filestop._id)">
+                <button class="btn btn-link" ng-click="removeFilestop(filestop.cid)">
                     <i class="icon-remove"></i>
                 </button>
             </td>

@@ -56,16 +56,24 @@ module.exports = function (config) {
             }
         });
 
-        Filestop.findOneAndRemove({cid: cid}, function (err, filestop) {
+        Filestop.findOne({cid:cid}, function (err, filestop) {
             if (err) {
                 console.log("Error deleting Filestop with cid " + cid + ": " + err);
                 res.send({success: false, errors: err});
                 return;
             }
 
-            if (filestop)
-                res.send({success: 'OK', cid: cid});
-            else {
+            if (filestop) {
+                filestop.deleteFolder(config, function (err) {
+                    // errno = 34 means that the folder cannot be found (yay!)
+                    if (err && err.errno != 34) {
+                        res.send({success: 'false', error: err});
+                        return;
+                    }
+                    res.send({success: 'OK', cid: cid});
+                    return;
+                });
+            } else {
                 console.log("Error deleting Filestop with cid " + cid + ": not found");
                 res.send({success: false, errors: "Filestop not found"});
             }

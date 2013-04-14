@@ -1,6 +1,7 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
     crypto = require('crypto'),
+    fs = require('fs'),
     filestopSchema;
 
 filestopSchema = new Schema({
@@ -20,6 +21,19 @@ filestopSchema.methods.createClientId = function (config) {
         .replace('+','')
         .replace('/','')
         .substring(0,12);
+}
+
+filestopSchema.methods.deleteFolder = function (config, callback) {
+    var filestopPath = config.uploadDir + "/" + this.cid + "/";
+    console.log("Deleting Filestop folder at " + filestopPath);
+    fs.rmdir(filestopPath, function (err) {
+        if (err) {
+            console.log("Error deleting Filestop path " + filestopPath, err);
+        }
+
+        if(typeof(callback) == "function")
+            callback(err);
+    });
 }
 
 mongoose.model('Filestop', filestopSchema);
