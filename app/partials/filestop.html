@@ -3,7 +3,7 @@
         <a href="#" class="btn btn-primary">&laquo; Home</a>
     </div>
     <div class="span10">
-        <h1>FileStop {{filestop.name}} - {{id}}</h1>
+        <h1>FileStop {{filestop.cid}} (id: {{filestop._id}})</h1>
     </div>
 </div>
 
@@ -22,10 +22,11 @@
             </thead>
             <tbody>
             <tr ng-repeat="file in files">
+                <td>{{file.cid}}</td>
                 <td>{{file.filename}}</td>
                 <td>{{file.size}}</td>
                 <td>
-                    <button class="btn btn-link" ng-click="removeFile(file._id)">
+                    <a ng-click="removeFile({{file.cid}})">
                         <i class="icon-remove"></i>
                     </button>
                 </td>

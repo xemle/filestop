@@ -11,7 +11,7 @@ angular.module('filestop.controllers', []).
         $scope.readRecentFilestops = function () {
             console.log('reading recent filestops');
             // TODO move this to the service provider
-            $http({method: 'GET', url: '/filestops'})
+            $http({method: 'GET', url: '/filestop'})
                 .success(function (data, status, headers, config) {
                     $scope.filestops = data;
                 }).error(
@@ -33,14 +33,14 @@ angular.module('filestop.controllers', []).
                 });
         };
 
-        $scope.removeFilestop = function(id) {
-            console.log('deleting filestop ' + id);
+        $scope.removeFilestop = function(cid) {
+            console.log('deleting filestop ' + cid);
             // TODO move this to the service provider
-            $http({method: 'DELETE', url: '/filestops/' + id})
+            $http({method: 'DELETE', url: '/filestop/' + cid})
                 .success(function(data, status, headers, config) {
                     $scope.readRecentFilestops();
                 }).error(function(data, status, headers, config) {
-                    console.log('error while deleting filestop' + id);
+                    console.log('error while deleting filestop' + cid);
                     alert(status + data);
                 });
         };
@@ -48,10 +48,10 @@ angular.module('filestop.controllers', []).
         $scope.newFilestop = function () {
             console.log('creating new filestop');
             // TODO move this to the service provider
-            $http({method: 'POST', url: '/filestops'}).
+            $http({method: 'POST', url: '/filestop'}).
                 success(function (data, status, headers, config) {
-                    console.log('redirecting to the new filestop with id ' + data.id);
-                    $location.path('/filestop/' + data.id);
+                    console.log('redirecting to the new filestop with cid ' + data.cid);
+                    $location.path('/filestop/' + data.cid);
                 }).
                 error(function (data, status, headers, config) {
                     console.log('error while creating filestop');
@@ -64,8 +64,8 @@ angular.module('filestop.controllers', []).
 
     }])
     .controller('filestopCtrl', ["$scope", "$routeParams", "$location", "$http", "$resource", "uploader", function ($scope, $routeParams, $location, $http, $resource, uploader) {
-        $scope.filestopApi = $resource('/filestops/:id', {id: $routeParams.id}, {get: {method: 'GET'}});
-        $scope.fileApi = $resource('/filestops/:id/files/:fileid', {id: $routeParams.id},
+        $scope.filestopApi = $resource('/filestop/:cid', {id: $routeParams.cid}, {get: {method: 'GET'}});
+        $scope.fileApi = $resource('/filestop/:cid/files/:filecid', {id: $routeParams.cid},
             {
                 list: {method: 'GET', isArray: true},
                 remove: {method: 'DELETE'}
@@ -75,16 +75,16 @@ angular.module('filestop.controllers', []).
 
         $scope.files = $scope.fileApi.list({});
 
-        $scope.id = $routeParams.id;
+        $scope.cid = $routeParams.cid;
 
         $scope.loadFiles = function() {
             $scope.files = $scope.fileApi.list({});
         };
 
-        $scope.removeFile = function(fileid) {
-            $scope.fileApi.remove({fileid: fileid}, function() {
+        $scope.removeFile = function(filecid) {
+            $scope.fileApi.remove({filecid: filecid}, function() {
                 for (var i = $scope.files.length - 1; i >= 0; i--) {
-                    if ($scope.files[i]._id == fileid) {
+                    if ($scope.files[i].cid == filecid) {
                         $scope.files.splice(i, 1);
                     }
                 }
@@ -92,12 +92,12 @@ angular.module('filestop.controllers', []).
         }
 
         if (!$scope.uploader) {
-            $scope.uploader = uploader.create($routeParams.id);
+            $scope.uploader = uploader.create($routeParams.cid);
         } else {
             uploader.update($scope.uploader);
         }
-        $scope.$on('file.upload.complete', function(scope, filestopId, file) {
-           if (filestopId === $scope.id) {
+        $scope.$on('file.upload.complete', function(scope, filestopCId, file) {
+           if (filestopCId === $scope.cid) {
                $scope.loadFiles();
            }
         });

@@ -1,19 +1,18 @@
 module.exports = function (app, config) {
 
     var files = require('../controllers/files')(config);
-    app.get('/files/:id', files.get);
+    app.get('/files/:cid', files.get);
     app.get('/files', files.findAll);
     app.post('/files', files.create);
-    app.put('/files/:id', files.update);
-    app.delete ('/files/:id', files.delete);
+    app.put('/files/:cid', files.update);
+    app.delete ('/files/:cid', files.delete);
+    app.post('/files/upload', files.upload);
 
-    var filestops = require('../controllers/filestops');
-    app.get('/filestops/:id/files', filestops.getFiles);
-    app.delete('/filestops/:filestopId/files/:id', files.delete);
-    app.post('/filestops/:id/upload', files.upload);
-    app.get('/filestops/:id', filestops.get);
-    app.get('/filestops', filestops.findAll);
-    app.post('/filestops', filestops.create);
-    app.put('/filestops/:id', filestops.update);
-    app.delete ('/filestops/:id', filestops.delete);
+    var filestops = require('../controllers/filestops')(config);
+    app.get('/filestop/:cid', filestops.get);
+    app.get('/filestop/files/:cid', filestops.getFiles);
+    app.get('/filestop', filestops.findAll);
+    app.post('/filestop', filestops.create);
+    app.put('/filestop/:cid', filestops.update);
+    app.delete ('/filestop/:cid', filestops.delete);
 };

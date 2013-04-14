@@ -1,93 +1,102 @@
 var mongoose = require('mongoose'),
     File = mongoose.model('File'),
     Filestop = mongoose.model('Filestop');
-    ;
+;
 
-exports.create = function(req, res) {
-    var filestop = new Filestop(req.body);
-    filestop.save(function (err) {
-        if (err) {
-            res.send({success: false, errors: err});
-        } else {
-            res.send({success: 'OK', id: filestop._id});
-        }
-    });
-};
-exports.update = function(req, res, next) {
-    var id = req.params.id;
+module.exports = function (config) {
+    var exports = {};
 
-    req.body.updated = new Date;
+    exports.create = function(req, res) {
+        var filestop = new Filestop(req.body);
 
-    Filestop.findByIdAndUpdate (id, {$set: req.body}, function (err, filestop) {
-        if (err) {
-            console.log("Error updating Filestop with id " + id + ": " + err);
-            res.send({success: false, errors: err});
-            return;
-        }
+        filestop.createClientId(config)
 
-        if (filestop)
-            res.send({success: 'OK', id: filestop._id});
-        else {
-            console.log("Error updating Filestop with id " + id + ": not found");
-            res.send({success: false, errors: "Filestop not found"});
-        }
-    });
-};
-exports.delete = function(req, res, next) {
-    var id = req.params.id;
+        filestop.save(function (err) {
+            if (err) {
+                res.send({success: false, errors: err});
+            } else {
+                res.send({success: 'OK', cid: filestop.cid});
+            }
+        });
+    };
+    exports.update = function(req, res, next) {
+        var cid = req.params.cid;
 
-    // delete all files
-    File.find({filestop: id}, function (err, result) {
-        if (err) {
-            console.log("Error querying for files of filestop " + id, err);
-            return res.send({success: false, errors: "Error querying for files of filestop " + id});
-        }
-        if (result) {
-            result.forEach (function (file) {
-                file.deleteFile();
-                file.remove();
-            });
-        }
-    });
+        req.body.updated = new Date;
 
-    Filestop.findByIdAndRemove(id, function (err, filestop) {
-        if (err) {
-            console.log("Error deleting Filestop with id " + id + ": " + err);
-            res.send({success: false, errors: err});
-            return;
-        }
+        Filestop.findOneAndUpdate ({cid: cid}, {$set: req.body}, function (err, filestop) {
+            if (err) {
+                console.log("Error updating Filestop with cid " + cid + ": " + err);
+                res.send({success: false, errors: err});
+                return;
+            }
 
-        if (filestop)
-            res.send({success: 'OK', id: id});
-        else {
-            console.log("Error deleting Filestop with id " + id + ": not found");
-            res.send({success: false, errors: "Filestop not found"});
-        }
-    });
-};
-exports.get = function(req, res, next) {
-    var id = req.params.id;
-    Filestop.findOne({_id: id}, function (err, result) {
-        if (!result) {
-            console.log("Filestop with " + id + " not found");
-            res.send(null);
-        }
-        res.send(result);
-    });
-};
+            if (filestop)
+                res.send({success: 'OK', cid: filestop.cid});
+            else {
+                console.log("Error updating Filestop with cid " + cid + ": not found");
+                res.send({success: false, errors: "Filestop not found"});
+            }
+        });
+    };
+    exports.delete = function(req, res, next) {
+        var cid = req.params.cid;
 
-exports.getFiles = function(req, res, next) {
-    var id = req.params.id;
-    File.find({filestop: id}, function (err, result) {
-        if (!result) {
-            console.log("No Files found for Filestop with " + id);
-            res.send(null);
-        }
-        res.send(result);
-    });
-};
-exports.findAll = function(req, res) {
-    Filestop.find().exec(function (err, result) {
-        res.send(result);
-    });
-};
+        // delete all files
+        File.find({filestopCId: cid}, function (err, result) {
+            if (err) {
+                console.log("Error querying for files of filestop with cid " + cid, err);
+                return res.send({success: false, errors: "Error querying for files of filestop with cid " + cid});
+            }
+            if (result) {
+                result.forEach (function (file) {
+                    file.deleteFile(config);
+                    file.remove();
+                });
+            }
+        });
+
+        Filestop.findOneAndRemove({cid: cid}, function (err, filestop) {
+            if (err) {
+                console.log("Error deleting Filestop with cid " + cid + ": " + err);
+                res.send({success: false, errors: err});
+                return;
+            }
+
+            if (filestop)
+                res.send({success: 'OK', cid: cid});
+            else {
+                console.log("Error deleting Filestop with cid " + cid + ": not found");
+                res.send({success: false, errors: "Filestop not found"});
+            }
+        });
+    };
+    exports.get = function(req, res, next) {
+        var cid = req.params.cid;
+        Filestop.findOne({cid: cid}, function (err, result) {
+            if (!result) {
+                console.log("Filestop with cid " + cid + " not found");
+                res.send(null);
+            }
+            res.send(result);
+        });
+    };
+
+    exports.getFiles = function(req, res, next) {
+        var cid = req.params.cid;
+        File.find({filestopCId: cid}, function (err, result) {
+            if (!result) {
+                console.log("No files found for Filestop with cid " + cid);
+                res.send(null);
+            }
+            res.send(result);
+        });
+    };
+    exports.findAll = function(req, res) {
+        Filestop.find().exec(function (err, result) {
+            res.send(result);
+        });
+    };
+
+    return exports;
+}
