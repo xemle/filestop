@@ -68,7 +68,10 @@ angular.module('filestop.controllers', []).
         $scope.fileApi = $resource('/filestops/:id/files', {id: $routeParams.id}, {get: {method: 'GET', isArray: true}});
 
         $scope.filestop = $scope.filestopApi.get({});
-        $scope.files = $scope.fileApi.get({});
+
+        $scope.loadFiles = function() {
+            $scope.files = $scope.fileApi.get({});
+        };
 
         $scope.id = $routeParams.id;
 
@@ -77,4 +80,11 @@ angular.module('filestop.controllers', []).
         } else {
             uploader.update($scope.uploader);
         }
+        $scope.$on('file.upload.complete', function(scope, filestopId, file) {
+           if (filestopId === $scope.id) {
+               $scope.loadFiles();
+           }
+        });
+
+        $scope.loadFiles();
     }]);

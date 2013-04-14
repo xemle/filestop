@@ -8,7 +8,7 @@
 angular.module('filestop.services', []).
   value('version', '0.1');
 
-angular.module('filestop').factory('uploader', function() {
+angular.module('filestop').factory('uploader', function($rootScope) {
     var _uploaders = [];
     var service = {
         dnd: false,
@@ -82,6 +82,7 @@ angular.module('filestop').factory('uploader', function() {
         uploader.bind('FileUploaded', function(up, file, response) {
             console.log("File " + file.name + " uploaded", response);
             service.updateProcess();
+            $rootScope.$broadcast('file.upload.complete', filestopId, file);
         });
         _uploaders.push(uploader);
         return uploader;
