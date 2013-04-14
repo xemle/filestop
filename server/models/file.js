@@ -8,8 +8,7 @@ fileSchema = new Schema({
     filename: { type: String, validate: [function(value) {
         return value && value.length > 3;
     }, "Filename is to short"] },
-    cid: {type: String},
-    filepath: { type: String},
+    cid: { required: true, type: String },
     created: { type: Date, default: Date.now },
     size: { required: true, type: Number, min: 0 },
     filestopCId: { required: true, type: String }

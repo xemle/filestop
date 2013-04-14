@@ -106,7 +106,7 @@ module.exports = function (config) {
                             fs.stat(filePath, function (err, stats) {
                                 var filesize = stats.size;
 
-                                var file = new File({filestopCId: filestop_cid, filename: req.body.name, size: filesize, filepath: filePath});
+                                var file = new File({filestopCId: filestop_cid, filename: req.body.name, size: filesize});
 
                                 file.createClientId(config);
 
