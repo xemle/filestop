@@ -9,7 +9,7 @@ module.exports = function (app, config) {
 
     var filestops = require('../controllers/filestops');
     app.get('/filestops/:id/files', filestops.getFiles);
-    app.delete('/filestops/:filestopId/files/:id', filestops.delete);
+    app.delete('/filestops/:filestopId/files/:id', files.delete);
     app.post('/filestops/:id/upload', files.upload);
     app.get('/filestops/:id', filestops.get);
     app.get('/filestops', filestops.findAll);
