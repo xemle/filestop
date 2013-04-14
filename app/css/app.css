@@ -28,3 +28,12 @@
   content: "";
   padding: 0;
 }
+
+.dropzone {
+    display: block;
+    padding: 20px 20px;
+    font-size: 150%;
+    color: #aaa;
+    border: 2px #eee dotted;
+    height: 150px;
+}

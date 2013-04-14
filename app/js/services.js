@@ -28,6 +28,7 @@ angular.module('filestop').factory('uploader', function() {
             max_file_size: '2000mb',
             chunk_size: '1mb',
             url: 'files/upload',
+            drop_element: 'dropzone',
             multipart: true,
             multipart_params : {
                 filestopId: filestopId
