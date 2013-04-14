@@ -39,11 +39,12 @@ module.exports = function (config) {
         });
     };
     exports.delete = function (req, res, next) {
-        var cid = req.params.cid;
+        var filestop_cid = req.params.cid;
+        var file_cid = req.params.fileCid;
 
-        File.findOneAndRemove({cid: cid}, function (err, file) {
+        File.findOneAndRemove({cid: file_cid, filestopCId: filestop_cid}, function (err, file) {
             if (err) {
-                console.log("Error deleting File with cid " + cid + ": " + err);
+                console.log("Error deleting File with cid " + file_cid + ": " + err);
                 res.send({success: false, errors: err});
                 return;
             }
@@ -53,7 +54,7 @@ module.exports = function (config) {
 
                 res.send({success: 'OK', cid: file.cid});
             } else {
-                console.log("Error deleting File with cid " + cid + ": not found");
+                console.log("Error deleting File with cid " + file_cid + ": not found");
                 res.send({success: false, errors: "File not found"});
             }
 
