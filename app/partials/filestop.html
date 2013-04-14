@@ -3,7 +3,7 @@
         <a href="#" class="btn btn-primary">&laquo; Home</a>
     </div>
     <div class="span10">
-        <h1>FileStop {{cid}}</h1>
+        <h1>FileStop {{filestop.name}}</h1>
     </div>
 </div>
 
@@ -25,7 +25,7 @@
                 <td>{{file.filename}}</td>
                 <td>{{file.size}}</td>
                 <td>
-                    <button class="btn btn-link" ng-click="removeFile(file.cid)">
+                    <button class="btn btn-link" ng-click="removeFile(file._id)">
                         <i class="icon-remove"></i>
                     </button>
                 </td>
@@ -45,17 +45,29 @@
                         <div class="controls">
                             <input type="text" id="filestopName" value="{{filestop.name}}">
                         </div>
-                        <!--<div class="controls">
-                            <div class="input-append">
-                            <input class="span2" id="filestopName" type="text" value="{{filestop.name}}">
-                            <button class="btn" type="button"><i class="icon-ok"></i></button>
-                        </div>
-                        </div>-->
                     </div>
                     <div class="control-group">
                         <label class="control-label">Created on</label>
                         <div class="controls">
                             <label class="control-label">{{filestop.created | date:'MMM d, y hh:mm:ss'}}</label>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Last update</label>
+                        <div class="controls">
+                            <label class="control-label">{{filestop.updated | prettyDate}}</label>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">URL</label>
+                        <div class="controls">
+                            <input type="text" id="filestopURL" value="{{filestop.cid}}">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">id</label>
+                        <div class="controls">
+                            <label class="control-label">{{cid}}</label>
                         </div>
                     </div>
                 </form>

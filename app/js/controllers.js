@@ -2,8 +2,7 @@
 
 /* Controllers */
 angular.module('filestop.controllers', []).
-    controller('homeCtrl', ["$scope", "$location", "$http", "filestopDAO", function ($scope, $location, $http, filestopDAO) {
-
+    controller('homeCtrl', ["$scope", "$location", "$http", function ($scope, $location, $http) {
         $scope.filestops = {};
 
         $scope.files = {};
