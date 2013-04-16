@@ -2,6 +2,7 @@ logs/*
 node_modules
 !.gitkeep
 .idea/workspace.xml
+.idea/uiDesigner.xml
 .*.swp
 server/controllers/uploads/
 uploads/
