@@ -26,6 +26,9 @@ module.exports = function (config) {
 
         req.body.updated = new Date;
 
+        // find and update does not call custom validators right now
+        // see this bug report: https://github.com/LearnBoost/mongoose/issues/860
+        // this is so sad..
         Filestop.findOneAndUpdate ({cid: cid}, {$set: req.body}, function (err, filestop) {
             if (err) {
                 console.log("Error updating Filestop with cid " + cid + ": " + err);
@@ -119,4 +122,4 @@ module.exports = function (config) {
     };
 
     return exports;
-}
+};

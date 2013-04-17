@@ -67,6 +67,12 @@
                         </div>
                     </div>
                     <div class="control-group">
+                        <label class="control-label" for="filestopDescription">Description</label>
+                        <div class="controls">
+                            <textarea rows="3" id="filestopDescription" ng-model="filestop.description" />
+                        </div>
+                    </div>
+                    <div class="control-group">
                         <label class="control-label">Link</label>
 
                         <div class="controls">
@@ -98,8 +104,7 @@
     </div>
 </div>
 
-<div id="deleteConfirmationModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-     aria-hidden="true">
+<div id="deleteConfirmationModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h3 id="myModalLabel">Modal header</h3>

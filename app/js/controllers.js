@@ -84,7 +84,12 @@ angular.module('filestop.controllers', []).
 
         $scope.updateFilestop = function() {
             console.log('updating filestop');
-            $scope.filestopApi.update({name: $scope.filestop.name});
+            $scope.filestopApi.update(
+                {
+                    name: $scope.filestop.name,
+                    description: $scope.filestop.description
+                });
+
         };
 
         $scope.allSelected = false;
