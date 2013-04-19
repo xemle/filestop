@@ -9,7 +9,7 @@ mongoose.connect(config.db);
 
 var models_path = __dirname + '/models'
 fs.readdirSync(models_path).forEach(function (file) {
-    require(models_path+'/' + file)
+    require(models_path+'/' + file)(config);
 });
 
 var app = express();
