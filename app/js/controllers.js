@@ -97,19 +97,26 @@ angular.module('filestop.controllers', []).
                 });
         };
 
-        $scope.allSelected = false;
+        $scope.getTotalFileSize = function() {
+            var size = 0;
+            for (var i in $scope.files) {
+                size += $scope.files[i].size;
+            }
+            return size;
+        };
 
         // file selection handling
+        $scope.allSelected = false;
         $scope.selectAll = function() {
             for (var i in $scope.files) {
                 $scope.files[i].selected = $scope.allSelected;
             }
         };
         $scope.checkSelected = function() {
-            var allSelected = true, allDeselected = false;
+            var allSelected = true, allDeselected = true;
             for (var i in $scope.files) {
                 allSelected = allSelected && $scope.files[i].selected;
-                allDeselected = allDeselected || $scope.files[i].selected;
+                allDeselected = allDeselected && !$scope.files[i].selected;
             }
             if (allSelected) {
                 $scope.allSelected = true;
@@ -132,6 +139,14 @@ angular.module('filestop.controllers', []).
                 var inputs = '<input type="hidden" name="fileCids" value="' + cids.join(',') + '"/>';
                 jQuery('<form action="'+ url +'" method="post">'+inputs+'</form>').appendTo('body').submit().remove();
             }
+        };
+        $scope.disableDownloadButton = function() {
+            for (var i in $scope.files) {
+                if ($scope.files[i].selected) {
+                    return false;
+                }
+            }
+            return true;
         };
 
         // Hook upload service
