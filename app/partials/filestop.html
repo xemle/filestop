@@ -14,7 +14,7 @@
 
 <div class="row-fluid">
     <!-- FILES -->
-    <div class="span6">
+    <div class="span8">
         <h2>Files</h2>
 
         <table class="table .table-condensed">
@@ -49,14 +49,14 @@
     </div>
 
     <!-- INFO and DROPZONE -->
-    <div class="span6">
+    <div class="span4">
         <div class="row-fluid">
             <div>
-                <h2>Dropzone</h2>
-
-                <div class="dropzone" id="dropzone">
-                    <i>Drag and drop your files here, we'll do the rest!</i>
+                <h2>Add Files</h2>
+                <div class="dropzone" id="dropzone" ui-if="hasDndSupport()">
+                    <i>Drag and drop your files from your computer here, we'll do the rest!</i>
                 </div>
+                <p>Use the button to open file dialog</p>
                 <a class="btn" id="pickfiles">Upload Files</a>
             </div>
         </div>
