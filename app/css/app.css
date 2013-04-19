@@ -34,6 +34,7 @@
     padding: 20px 20px;
     font-size: 150%;
     color: #aaa;
-    border: 2px #eee dotted;
+    background-color: #ffffff;
+    border: 2px #aaa dotted;
     height: 150px;
 }
