@@ -3,7 +3,7 @@ var express = require('express'),
 
 var env = process.env.NODE_ENV || 'development',
     config = require('./config/config')[env],
-    mongoose = require('mongoose')
+    mongoose = require('mongoose');
 
 mongoose.connect(config.db);
 

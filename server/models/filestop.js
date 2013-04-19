@@ -9,7 +9,7 @@ filestopSchema = new Schema({
         return value && value.length > 3;
     }, "Name is to short"], default: "Unnamed" },
     description: { type: String, validate: [function(value) {
-        return value && value.length < 500;
+        return !value || value.length < 500;
     }, "Description is too long"], default: "" },
     cid: {type: String},
     url: {type: String},

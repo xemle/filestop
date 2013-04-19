@@ -43,8 +43,8 @@ angular.module('filestop.controllers', []).
                     $location.path('/filestop/' + data.cid);
                 }).
                 error(function (data, status, headers, config) {
-                    console.log('error while creating filestop');
-                    alert(status + data);
+                    console.log('error while creating filestop', data);
+                    alert("Could not create a new filestop");
                 });
         };
 

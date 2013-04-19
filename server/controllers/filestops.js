@@ -15,7 +15,7 @@ module.exports = function (config) {
 
         filestop.save(function (err) {
             if (err) {
-                res.send({success: false, errors: err});
+                res.send(400, {error: err});
             } else {
                 res.send({success: 'OK', cid: filestop.cid});
             }
