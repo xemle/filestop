@@ -49,33 +49,39 @@ angular.module('filestop.controllers', []).
         };
 
     }])
-    .controller('filestopCtrl', ["$scope", "$routeParams", "$location", "$http", "$resource", "uploader", function ($scope, $routeParams, $location, $http, $resource, uploader) {
-        $scope.filestopApi = $resource('/filestop/:cid', {cid: $routeParams.cid},
+    .controller('filestopCtrl', ["$scope", "$routeParams", "$location", "$http", "$resource", "UploadService", function ($scope, $routeParams, $location, $http, $resource, uploadService) {
+        var filestopCid = $routeParams.cid;
+        $scope.filestopApi = $resource('/filestop/:cid', {cid: filestopCid},
             {
                 get: {method: 'GET'},
                 update: {method: 'PUT'}
             });
-        $scope.fileApi = $resource('/filestop/:cid/files/:filecid', {cid: $routeParams.cid},
+        $scope.fileApi = $resource('/filestop/:cid/files/:filecid', {cid: filestopCid},
             {
                 list: {method: 'GET', isArray: true},
                 remove: {method: 'DELETE'},
                 downloadAll: {method: 'POST'}
             });
 
+        $scope.cid = filestopCid;
         $scope.filestop = $scope.filestopApi.get({});
+        $scope.files = [];
+        $scope.uploadFiles = [];
 
-        $scope.files = $scope.fileApi.list({});
-
-        $scope.cid = $routeParams.cid;
-
-        $scope.loadFiles = function() {
+        $scope.updateFiles = function() {
             $scope.files = $scope.fileApi.list({});
         };
 
-        $scope.removeFile = function(filecid) {
-            $scope.fileApi.remove({filecid: filecid}, function() {
+        $scope.upadateUploadFiles= function() {
+            $scope.$apply(function() {
+                $scope.uploadFiles = uploadService.getFiles(filestopCid);
+            });
+        };
+
+        $scope.removeFile = function(fileCid) {
+            $scope.fileApi.remove({filecid: fileCid}, function() {
                 for (var i = $scope.files.length - 1; i >= 0; i--) {
-                    if ($scope.files[i].cid == filecid) {
+                    if ($scope.files[i].cid == fileCid) {
                         $scope.files.splice(i, 1);
                     }
                 }
@@ -89,11 +95,11 @@ angular.module('filestop.controllers', []).
                     name: $scope.filestop.name,
                     description: $scope.filestop.description
                 });
-
         };
 
         $scope.allSelected = false;
 
+        // file selection handling
         $scope.selectAll = function() {
             for (var i in $scope.files) {
                 $scope.files[i].selected = $scope.allSelected;
@@ -110,8 +116,9 @@ angular.module('filestop.controllers', []).
             } else if (allDeselected) {
                 $scope.allSelected = false;
             }
-        }
+        };
 
+        // Multiple download
         $scope.downloadSelected = function() {
             var cids = [];
             for (var i in $scope.files) {
@@ -125,17 +132,27 @@ angular.module('filestop.controllers', []).
                 var inputs = '<input type="hidden" name="fileCids" value="' + cids.join(',') + '"/>';
                 jQuery('<form action="'+ url +'" method="post">'+inputs+'</form>').appendTo('body').submit().remove();
             }
-        }
-        if (!$scope.uploader) {
-            $scope.uploader = uploader.create($routeParams.cid);
-        } else {
-            uploader.update($scope.uploader);
-        }
-        $scope.$on('file.upload.complete', function(scope, filestopCId, file) {
-           if (filestopCId === $scope.cid) {
-               $scope.loadFiles();
-           }
-        });
+        };
 
-        $scope.loadFiles();
+        // Hook upload service
+        if (!$scope.uploader) {
+            $scope.uploader = uploadService.create(filestopCid);
+        } else {
+            uploadService.update($scope.uploader);
+        }
+        $scope.$on('uploads:complete', function(scope, filestopCid, file) {
+            if (filestopCid === $scope.cid) {
+                $scope.updateFiles();
+            }
+        });
+        $scope.$on('uploads:change', function(scope, filestopCid, file) {
+            if (filestopCid === $scope.cid) {
+                $scope.upadateUploadFiles();
+            }
+        });
+        $scope.hasDndSupport = function() {
+            return uploadService.dnd;
+        };
+
+        $scope.updateFiles();
     }]);

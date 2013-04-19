@@ -28,7 +28,7 @@
             </thead>
             <tbody>
             <tr ng-repeat="file in files">
-                <th><input ng-model="file.selected" ng-click="checkSelected()" type="checkbox"/></th>
+                <td><input ng-model="file.selected" ng-click="checkSelected()" type="checkbox"/></td>
                 <td><a ng-href="/filestop/{{cid}}/files/{{file.cid}}">{{file.filename}}</a></td>
                 <td>{{file.size | prettySize}}</td>
                 <td>
@@ -36,6 +36,12 @@
                         <i class="icon-remove"></i>
                     </button>
                 </td>
+            </tr>
+            <tr ng-repeat="file in uploadFiles">
+                <td></td>
+                <td>{{file.name}} ({{file.status}})</td>
+                <td>{{file.percent}}% of {{file.size | prettySize}}</td>
+                <td></td>
             </tr>
             </tbody>
         </table>
