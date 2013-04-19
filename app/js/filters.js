@@ -37,4 +37,31 @@ angular.module('filestop.filters', []).
 
             return number;
         }
+    })
+    .filter('filenameLimit', function () {
+        return function (text, length, end) {
+            if (text.length < 40) {
+                return text;
+            }
+            var dot = text.lastIndexOf('.'), ext = '';
+            if (dot > 0) {
+                ext = text.substr(dot);
+            }
+            if (ext.length < 10) {
+                return text.substr(0, 43 - ext.length) + '..' + ext;
+            } else {
+                return text.substr(0, 30) + '...' + text.substr(text.length - 5);
+            }
+        }
+    })
+    .filter('uploadStatus', function () {
+        return function (number) {
+            if (number == 2) {
+                return 'uploading...'
+            } else if (number == 1) {
+                return '(queued)'
+            } else {
+                return '';
+            }
+        }
     });
