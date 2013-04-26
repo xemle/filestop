@@ -10,14 +10,15 @@ module.exports = function (app, config) {
     */
 
     var filestops = require('../controllers/filestops')(config);
-    app.get('/filestop/:cid', filestops.get);
-    app.get('/filestop/:cid/files/:fileCid', files.download);
-    app.delete('/filestop/:cid/files/:fileCid', files.delete);
-    app.get('/filestop/:cid/files', filestops.getFiles);
-    app.post('/filestop/:cid/files', files.downloadAll);
-    app.post('/filestop/:cid/upload', files.upload);
-    app.get('/filestop', filestops.findAll);
-    app.post('/filestop', filestops.create);
-    app.put('/filestop/:cid', filestops.update);
-    app.delete ('/filestop/:cid', filestops.delete);
+    var path = config.path || '';
+    app.get(path + '/filestop/:cid', filestops.get);
+    app.get(path + '/filestop/:cid/files/:fileCid', files.download);
+    app.delete(path + '/filestop/:cid/files/:fileCid', files.delete);
+    app.get(path + '/filestop/:cid/files', filestops.getFiles);
+    app.post(path + '/filestop/:cid/files', files.downloadAll);
+    app.post(path + '/filestop/:cid/upload', files.upload);
+    app.get(path + '/filestop', filestops.findAll);
+    app.post(path + '/filestop', filestops.create);
+    app.put(path + '/filestop/:cid', filestops.update);
+    app.delete (path + '/filestop/:cid', filestops.delete);
 };

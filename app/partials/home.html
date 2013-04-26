@@ -24,7 +24,7 @@
         </thead>
         <tbody>
         <tr ng-repeat="filestop in filestops">
-            <td><a href="/#/filestop/{{filestop.cid}}">{{filestop.name}}</a></td>
+            <td><a href="#/filestop/{{filestop.cid}}">{{filestop.name}}</a></td>
             <td>{{filestop.created | prettyDate}}</td>
             <td>
                 <button class="btn btn-link" ng-click="removeFilestop(filestop.cid)">

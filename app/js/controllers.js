@@ -3,7 +3,7 @@
 /* Controllers */
 angular.module('filestop.controllers', []).
     controller('homeCtrl', ["$scope", "$location", "$http", "$resource", "$routeParams", function ($scope, $location, $http, $resource, $routeParams) {
-        $scope.filestopApi = $resource('/filestop/:cid', { },
+        $scope.filestopApi = $resource('filestop/:cid', { },
             {
                 list: {method: 'GET', isArray: true},
                 remove: {method: 'DELETE'}
@@ -37,10 +37,10 @@ angular.module('filestop.controllers', []).
         $scope.newFilestop = function () {
             console.log('creating new filestop');
             // TODO move this to the service provider
-            $http({method: 'POST', url: '/filestop'}).
+            $http({method: 'POST', url: 'filestop'}).
                 success(function (data, status, headers, config) {
                     console.log('redirecting to the new filestop with cid ' + data.cid);
-                    $location.path('/filestop/' + data.cid);
+                    $location.path('filestop/' + data.cid);
                 }).
                 error(function (data, status, headers, config) {
                     console.log('error while creating filestop', data);
@@ -51,12 +51,12 @@ angular.module('filestop.controllers', []).
     }])
     .controller('filestopCtrl', ["$scope", "$routeParams", "$location", "$http", "$resource", "UploadService", function ($scope, $routeParams, $location, $http, $resource, uploadService) {
         var filestopCid = $routeParams.cid;
-        $scope.filestopApi = $resource('/filestop/:cid', {cid: filestopCid},
+        $scope.filestopApi = $resource('filestop/:cid', {cid: $routeParams.cid},
             {
                 get: {method: 'GET'},
                 update: {method: 'PUT'}
             });
-        $scope.fileApi = $resource('/filestop/:cid/files/:filecid', {cid: filestopCid},
+        $scope.fileApi = $resource('filestop/:cid/files/:filecid', {cid: filestopCid},
             {
                 list: {method: 'GET', isArray: true},
                 remove: {method: 'DELETE'},
@@ -135,7 +135,7 @@ angular.module('filestop.controllers', []).
             }
             if (cids.length > 0) {
                 // work around to trigger download
-                var url = "/filestop/" + $scope.cid + "/files";
+                var url = "filestop/" + $scope.cid + "/files";
                 var inputs = '<input type="hidden" name="fileCids" value="' + cids.join(',') + '"/>';
                 jQuery('<form action="'+ url +'" method="post">'+inputs+'</form>').appendTo('body').submit().remove();
             }

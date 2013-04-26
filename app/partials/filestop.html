@@ -23,7 +23,7 @@
             <tbody>
             <tr ng-repeat="file in files">
                 <td><input ng-model="file.selected" ng-click="checkSelected()" type="checkbox"/></td>
-                <td><a ng-href="/filestop/{{cid}}/files/{{file.cid}}" title="{{file.filename}}">{{file.filename | filenameLimit}}</a></td>
+                <td><a ng-href="filestop/{{cid}}/files/{{file.cid}}" title="{{file.filename}}">{{file.filename | filenameLimit}}</a></td>
                 <td>{{file.size | prettySize}}</td>
                 <td>
                     <button class="btn btn-link" ng-click="removeFile(file.cid)">
