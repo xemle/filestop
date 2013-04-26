@@ -9,34 +9,3 @@
         <button ng-click="newFilestop()" class="btn btn-primary btn-large">Start a new FileStop &raquo;</button>
     </p>
 </div>
-
-<div class="row-fluid">
-    <div class="span5">
-        <h2>FileStops</h2>
-
-        <table class="table .table-condensed">
-        <thead>
-        <tr>
-            <th>name</th>
-            <th>created on</th>
-            <th>options</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="filestop in filestops">
-            <td><a href="#/filestop/{{filestop.cid}}">{{filestop.name}}</a></td>
-            <td>{{filestop.created | prettyDate}}</td>
-            <td>
-                <button class="btn btn-link" ng-click="removeFilestop(filestop.cid)">
-                    <i class="icon-remove"></i>
-                </button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-
-    </div>
-    <div class="span5">
-        <h2>Placeholder</h2>
-    </div>
-</div>

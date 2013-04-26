@@ -17,7 +17,7 @@ module.exports = function (app, config) {
     app.get(path + '/filestop/:cid/files', filestops.getFiles);
     app.post(path + '/filestop/:cid/files', files.downloadAll);
     app.post(path + '/filestop/:cid/upload', files.upload);
-    app.get(path + '/filestop', filestops.findAll);
+    //app.get(path + '/filestop', filestops.findAll);
     app.post(path + '/filestop', filestops.create);
     app.put(path + '/filestop/:cid', filestops.update);
     app.delete (path + '/filestop/:cid', filestops.delete);
