@@ -165,8 +165,8 @@ angular.module('filestop.controllers', []).
                 $scope.upadateUploadFiles();
             }
         });
-        $scope.hasDndSupport = function() {
-            return uploadService.dnd;
+        $scope.getDropZoneClass = function() {
+            return uploadService.dnd ? '' : 'hide';
         };
 
         $scope.updateFiles();

@@ -38,3 +38,7 @@
     border: 2px #aaa dotted;
     height: 150px;
 }
+
+.hide {
+    display: none;
+}

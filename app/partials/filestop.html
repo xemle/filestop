@@ -48,7 +48,7 @@
             <div class="well">
                 <h2>Add Files</h2>
                 <br>
-                <div class="dropzone" id="dropzone" ui-if="hasDndSupport()">
+                <div class="dropzone" id="dropzone" ng-class="getDropZoneClass()">
                     <i>Drag and drop your files from your computer here, we'll do the rest!</i>
                 </div>
                 <p>Use the button to open file dialog</p>
