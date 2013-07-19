@@ -140,6 +140,18 @@ angular.module('filestop.controllers', []).
                 jQuery('<form action="'+ url +'" method="post">'+inputs+'</form>').appendTo('body').submit().remove();
             }
         };
+        $scope.downloadAll = function() {
+            var cids = [];
+            for (var i in $scope.files) {
+                cids.push($scope.files[i].cid);
+            }
+            if (cids.length > 0) {
+                // work around to trigger download
+                var url = "filestop/" + $scope.cid + "/files";
+                var inputs = '<input type="hidden" name="fileCids" value="' + cids.join(',') + '"/>';
+                jQuery('<form action="'+ url +'" method="post">'+inputs+'</form>').appendTo('body').submit().remove();
+            }
+        };
         $scope.disableDownloadButton = function() {
             for (var i in $scope.files) {
                 if ($scope.files[i].selected) {

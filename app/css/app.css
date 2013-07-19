@@ -42,3 +42,6 @@
 .hide {
     display: none;
 }
+.editable:hover {
+    background-color: #eee;
+}
