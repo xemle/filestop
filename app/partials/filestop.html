@@ -2,9 +2,9 @@
     <!-- FILES -->
     <div class="span8">
         <h2 editable="filestop.name" editable-change="updateFilestop()"></h2>
-        <p>Public url: <a href="{{filestop.url}}">{{filestop.url}}</a></p>
+        <div class="alert">Share files by sending URL: <a href="{{filestop.url}}">{{filestop.url}}</a></div>
         <p textable="filestop.description" textable-change="updateFilestop()"></p>
-        <p><a class="btn btn-primary" ng-click="downloadAll()" ng-disabled="files.length == 0">Download All</a></p>
+        <p><button type="button" class="btn btn-primary" ng-click="downloadAll()" ng-disabled="files.length == 0">Download All</button></p>
         <p>Your Filestop has {{files.length}} files with {{getTotalFileSize() | prettySize}} in total.</p>
         <table class="table .table-condensed">
             <thead>
@@ -34,7 +34,8 @@
             </tr>
             </tbody>
         </table>
-        <button type="button" class="btn btn-success" ng-click="downloadSelected()" ng-disabled="disableDownloadButton()">Download selected</button>
+        <p><button type="button" class="btn btn-success" ng-click="downloadSelected()" ng-disabled="disableDownloadButton()">Download selected</button>
+        <button type="button" class="btn btn-primary" ng-click="downloadAll()" ng-disabled="files.length == 0">Download All</button></p>
     </div>
 
     <!-- INFO and DROPZONE -->
@@ -58,5 +59,6 @@
         </div>
     </div>
 </div>
-
-
+<div class="row-fluid">
+    <div class="span12"><p><a href="#/">Back</a> to create new filestop. <a href="https://github.com/xemle/filestop">Source</a> available at GitHub</p></div>
+</div>
