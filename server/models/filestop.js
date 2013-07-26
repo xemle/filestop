@@ -36,7 +36,7 @@ module.exports = function (config) {
         updated: { type: Date, default: Date.now },
         expires: { type: Date, default: function() {
             var result = new Date();
-            result.setTime(result.getTime() + config.defaultExpireOffset);
+            result.setTime(result.getTime() + config.defaultExpireOffset * 1000);
             return result;
         }}
     }, {

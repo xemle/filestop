@@ -9,7 +9,7 @@ module.exports = {
         behindProxy: false,
         salt: "secretsalt",
         port: 8000,
-        defaultExpireOffset: 600 // expire time in seconds: 5 Minutes
+        defaultExpireOffset: 300 // expire time in seconds: 5 Minutes
     },
     production: {
         db: "mongodb://localhost/filestopdb",

@@ -22,5 +22,5 @@ module.exports = function (app, config) {
     app.put(path + '/filestop/:cid', filestops.update);
     app.delete (path + '/filestop/:cid', filestops.delete);
 
-    // app.get(path + '/webcron', filestops.deleteExpired);
+    app.get(path + '/webcron', filestops.deleteExpired);
 };
