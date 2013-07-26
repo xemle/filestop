@@ -1,6 +1,8 @@
 var mongoose = require('mongoose'),
     File = mongoose.model('File'),
+    Filestop = mongoose.model('Filestop'),
     fs = require('fs'),
+    path = require('path'),
     mkdirp = require('mkdirp'),
     mime = require('mime'),
     tinyzip = require('tinyzip');
@@ -86,7 +88,7 @@ module.exports = function (config) {
                 console.log("File with " + file_cid + " not found");
                 res.send(null);
             } else {
-                var file = config.uploadDir + "/" + filestop_cid + "/" + result.filename;
+                var file = config.uploadDir + path.sep + filestop_cid + path.sep + result.filename;
                 var filename = result.filename;
                 var mimetype = mime.lookup(file);
 
@@ -112,10 +114,10 @@ module.exports = function (config) {
                 res.setHeader('Content-type', 'application/zip');
                 res.setHeader('Transfer-Encoding', 'chunked');
 
-                var rootpath = config.uploadDir + "/" + filestop_cid;
+                var rootpath = config.uploadDir + path.sep + filestop_cid;
                 var zip = new tinyzip.TinyZip({rootpath: rootpath, utf8: true, compress: {level: 1}, fast: true});
                 for (var i in result) {
-                    var filename = rootpath + "/" + result[i].filename;
+                    var filename = rootpath + path.sep + result[i].filename;
                     zip.addFile({file:filename})
                 }
                 var zipStream = zip.getZipStream();
@@ -128,47 +130,55 @@ module.exports = function (config) {
         var filestop_cid = req.params.cid;
         var chunk = parseInt(req.body.chunk || 0) + 1;
         var chunks = req.body.chunks || 1;
-        console.log("upload called on filestop_cid " + filestop_cid + " chunk " + chunk + "/" + chunks);
+        console.log("upload called on filestop_cid " + filestop_cid + " chunk " + chunk + path.sep + chunks);
 
-        fs.readFile(req.files.file.path, function (err, data) {
-            var fileDir = config.uploadDir + "/" + filestop_cid + "/";
+        Filestop.findOne({cid: filestop_cid}, function (err, filestop) {
+            if (!filestop) {
+                console.log("Filestop with cid '"+filestop_cid+"' does not exist. Skip upload");
+                res.send(404);
+                return;
+            }
+            fs.readFile(req.files.file.path, function (err, data) {
+                var fileDir = config.uploadDir + path.sep + filestop_cid + path.sep;
 
-            var filePath = fileDir + req.body.name;
-            var filePathPart = filePath + ".part";
-            console.log("writing upload to " + filePath);
-            mkdirp(fileDir, 0755, function (err) {
-                if (err) {
-                    console.log("Error creating directory " + fileDir + ": ", err);
-                    res.send({success: false, errors: "Upload error"});
-                    return;
-                }
-                fs.appendFile(filePathPart, data, function (err) {
+                var filePath = fileDir + req.body.name;
+                var filePathPart = filePath + ".part";
+                console.log("writing upload to " + filePath);
+                mkdirp(fileDir, 0755, function (err) {
                     if (err) {
-                        console.log("Error saving chunk " + chunk + "/" + chunks + ": ", err);
+                        console.log("Error creating directory " + fileDir + ": ", err);
                         res.send({success: false, errors: "Upload error"});
                         return;
                     }
+                    fs.appendFile(filePathPart, data, function (err) {
+                        if (err) {
+                            console.log("Error saving chunk " + chunk + path.sep + chunks + ": ", err);
+                            res.send({success: false, errors: "Upload error"});
+                            return;
+                        }
 
-                    if (chunk == chunks) {
-                        fs.rename(filePathPart, filePath, function (err) {
-                            fs.stat(filePath, function (err, stats) {
-                                var filesize = stats.size;
+                        if (chunk == chunks) {
+                            fs.rename(filePathPart, filePath, function (err) {
+                                fs.stat(filePath, function (err, stats) {
+                                    var filesize = stats.size;
 
-                                var file = new File({filestopCId: filestop_cid, filename: req.body.name, size: filesize});
+                                    var file = new File({filestopCId: filestop_cid, filename: req.body.name, size: filesize});
 
-                                file.createClientId(config);
+                                    file.createClientId(config);
 
-                                file.save(function (err) {
-                                    if (!err) {
-                                        res.send({success: "OK", cid: file.cid});
-                                        return;
-                                    }
+                                    file.save(function (err) {
+                                        if (!err) {
+                                            Filestop.update({_id: filestop.id}, {$set: { updated: new Date() }});
+                                            res.send({success: "OK", cid: file.cid});
+                                            return;
+                                        }
+                                    });
                                 });
                             });
-                        });
-                    } else {
-                        res.send({success: "OK"});
-                    }
+                        } else {
+                            res.send({success: "OK"});
+                        }
+                    });
                 });
             });
         });

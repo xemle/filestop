@@ -1,5 +1,6 @@
 var mongoose = require('mongoose'),
     fs = require('fs'),
+    path = require('path'),
     Schema = mongoose.Schema,
     crypto = require('crypto'),
     fileSchema;
@@ -16,7 +17,7 @@ module.exports = function (config) {
     });
 
     fileSchema.methods.deleteFile = function (config, callback) {
-        var filePath = config.uploadDir + "/" + this.filestopCId + "/" + this.filename;
+        var filePath = config.uploadDir + path.sep + this.filestopCId + path.sep + this.filename;
         console.log("Deleting file at " + filePath);
         fs.unlink(filePath, function (err) {
             if (err) {

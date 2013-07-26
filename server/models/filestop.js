@@ -2,7 +2,26 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
     crypto = require('crypto'),
     fs = require('fs'),
+    path = require('path'),
+    deleteFolderRecursive,
+    File = mongoose.model('File'),
     filestopSchema;
+
+deleteFolderRecursive = function(dir) {
+    if (fs.existsSync(dir)) {
+        fs.readdirSync(dir).forEach(function(file, index){
+            var curDir = dir + path.sep + file;
+            if (file == '.' || file == '..') {
+                return;
+            } else if (fs.statSync(curDir).isDirectory()) {
+                deleteFolderRecursive(curDir);
+            } else {
+                fs.unlinkSync(curDir);
+            }
+        });
+        fs.rmdirSync(dir);
+    }
+};
 
 module.exports = function (config) {
     filestopSchema = new Schema({
@@ -15,7 +34,11 @@ module.exports = function (config) {
         cid: {type: String},
         created: { type: Date, default: Date.now },
         updated: { type: Date, default: Date.now },
-        expires: { type: Date, default: Date.now }
+        expires: { type: Date, default: function() {
+            var result = new Date();
+            result.setTime(result.getTime() + config.defaultExpireOffset);
+            return result;
+        }}
     }, {
         toJSON: {
             virtuals: true
@@ -33,18 +56,25 @@ module.exports = function (config) {
             .replace('/','')
             .substring(0,12);
     };
+    filestopSchema.methods.deleteAllFileModels = function () {
+        // delete all files
+        File.find({filestopCId: this.cid}, function (err, result) {
+            if (err) {
+                console.log("Error querying for files of filestop with cid " + this.cid, err);
+                return;
+            }
+            if (result) {
+                result.forEach (function (file) {
+                    file.remove();
+                });
+            }
+        });
+    };
 
     filestopSchema.methods.deleteFolder = function (config, callback) {
-        var filestopPath = config.uploadDir + "/" + this.cid + "/";
+        var filestopPath = config.uploadDir + path.sep + this.cid;
         console.log("Deleting Filestop folder at " + filestopPath);
-        fs.rmdir(filestopPath, function (err) {
-            if (err) {
-                console.log("Error deleting Filestop path " + filestopPath, err);
-            }
-
-            if(typeof(callback) == "function")
-                callback(err);
-        });
+        deleteFolderRecursive(filestopPath);
     };
 
     mongoose.model('Filestop', filestopSchema);

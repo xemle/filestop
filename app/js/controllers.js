@@ -5,11 +5,8 @@ angular.module('filestop.controllers', []).
     controller('homeCtrl', ["$scope", "$location", "$http", "$resource", "$routeParams", function ($scope, $location, $http, $resource, $routeParams) {
         $scope.filestopApi = $resource('filestop/:cid', { },
             {
-                list: {method: 'GET', isArray: true},
                 remove: {method: 'DELETE'}
             });
-
-        $scope.filestops = $scope.filestopApi.list();
 
         $scope.removeFilestop = function(cid) {
             console.log('deleting filestop ' + cid);
@@ -49,7 +46,7 @@ angular.module('filestop.controllers', []).
         };
 
     }])
-    .controller('filestopCtrl', ["$scope", "$routeParams", "$location", "$http", "$resource", "UploadService", function ($scope, $routeParams, $location, $http, $resource, uploadService) {
+    .controller('filestopCtrl', ["$scope", "$routeParams", "$location", "$http", "$resource", "UploadService", "$filter", function ($scope, $routeParams, $location, $http, $resource, uploadService, $filter) {
         var filestopCid = $routeParams.cid;
         $scope.filestopApi = $resource('filestop/:cid', {cid: $routeParams.cid},
             {
@@ -64,7 +61,11 @@ angular.module('filestop.controllers', []).
             });
 
         $scope.cid = filestopCid;
-        $scope.filestop = $scope.filestopApi.get({});
+        $scope.filestop = $scope.filestopApi.get({}, function() {}, function(response) {
+            if (response.status == 404) {
+                $location.path('/');
+            }
+        });
         $scope.files = [];
         $scope.uploadFiles = [];
 
@@ -181,5 +182,49 @@ angular.module('filestop.controllers', []).
             return uploadService.dnd ? '' : 'hide';
         };
 
+        $scope.timeToLive = function() {
+            var now = new Date().getTime(), expires = new Date().getTime();
+            if ($scope.filestop.expires) {
+                expires = new Date($scope.filestop.expires).getTime()
+            }
+            if (now < expires) {
+                return Math.floor((expires - now) / 1000);
+            } else {
+                return 0;
+            }
+        };
+        $scope.expireDate = function(dateFormat) {
+            var ttl = $scope.timeToLive(), text = "", days, hours, minutes;
+            dateFormat = dateFormat || 'd. MMM y';
+            days = Math.floor(ttl / (3600 * 24));
+            ttl = ttl - (days * 3600 * 24);
+            hours = Math.floor(ttl / 3600);
+            ttl = ttl - (hours * 3600);
+            minutes = Math.floor(ttl / 60);
+
+            if (days > 6) {
+                text = ""
+            } else if (days > 2) {
+                text = " (expires in " + days + " days)";
+            } else if (days > 0) {
+                text = " (expires in " + days + " days and " + hours + " hours)";
+            } else if (hours > 0) {
+                text = " (expires in " + hours + " hours and " + minutes + " minutes)";
+            } else if (minutes > 0) {
+                text = " (expires in " + minutes + " minutes)";
+            } else {
+                text = " (expired)";
+            }
+            return $filter('date')($scope.filestop.expires, dateFormat) + text;
+        };
+        $scope.expireStyle = function() {
+            var ttl = $scope.timeToLive(), days;
+            days = Math.floor(ttl / (3600 * 24));
+            if (days < 10) {
+                return {color: 'red'}
+            } else {
+                return {}
+            }
+        };
         $scope.updateFiles();
     }]);

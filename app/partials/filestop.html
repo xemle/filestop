@@ -53,7 +53,8 @@
         </div>
         <div class="row-fluid">
             <div >
-                <p>Created on: {{filestop.created | date:'MMM d, y hh:mm:ss'}}</p>
+                <p>Created on: {{filestop.created | date:'d. MMM y'}}</p>
+                <p ng-style="expireStyle()">Expires on: {{expireDate('d. MMM y')}}</p>
                 <p>Last update: {{filestop.updated | prettyDate}}</p>
             </div>
         </div>
