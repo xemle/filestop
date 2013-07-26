@@ -46,7 +46,7 @@ angular.module('filestop.controllers', []).
         };
 
     }])
-    .controller('filestopCtrl', ["$scope", "$routeParams", "$location", "$http", "$resource", "UploadService", "$filter", function ($scope, $routeParams, $location, $http, $resource, uploadService, $filter) {
+    .controller('filestopCtrl', ["$scope", "$routeParams", "$location", "$http", "$resource", "UploadService", "$filter", "$dialog", function ($scope, $routeParams, $location, $http, $resource, uploadService, $filter, $dialog) {
         var filestopCid = $routeParams.cid;
         $scope.filestopApi = $resource('filestop/:cid', {cid: $routeParams.cid},
             {
@@ -226,5 +226,54 @@ angular.module('filestop.controllers', []).
                 return {}
             }
         };
+
+
+        $scope.openDialog = function() {
+            var dialog = $dialog.dialog({
+                backdrop: true,
+                keyboard: true,
+                backdropClick: true,
+                templateUrl: '../partials/editDialog.html',
+                controller: 'editDialogCtrl',
+                resolve: {
+                    filestop: function() { return $scope.filestop },
+                    filestopApi: function() { return $scope.filestopApi }
+                }
+            });
+            dialog.open().then(function(reload){
+                if (reload) {
+                    $scope.filestop = $scope.filestopApi.get({});
+                }
+            });
+        };
         $scope.updateFiles();
+
+    }])
+    .controller('editDialogCtrl', ['$scope', '$filter', 'dialog', 'filestop', 'filestopApi', function($scope, $filter, dialog, filestop, filestopApi) {
+        $scope.filestop = filestop;
+        $scope.expires = $filter('date')($scope.filestop.expires, 'd.MM.y hh:mm:ss');
+        $scope.parseDate = function(date) {
+            var parts = date.split(' '), d, t;
+            if (parts.length != 2) {
+                return $scope.filestop.expires;
+            }
+            d = parts[0].split('.');
+            t = parts[1].split(':');
+            if (d.length != 3 || t.length != 3) {
+                return $scope.filestop.expires;
+            }
+            return new Date(d[2], d[1] - 1, d[0], t[0], t[1], t[2]);
+        };
+        $scope.save = function() {
+            var expires = $scope.parseDate($scope.expires);
+            filestopApi.update(
+                {
+                    expires: expires
+                }, function() {
+                    dialog.close(true);
+                });
+        };
+        $scope.cancel = function() {
+            dialog.close();
+        }
     }]);

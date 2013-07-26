@@ -30,8 +30,15 @@ module.exports = function (config) {
            if (err) {
                res.send(404);
            } else {
-               filestop.name = req.body.name;
-               filestop.description = req.body.description;
+               if (req.body.name) {
+                   filestop.name = req.body.name;
+               }
+               if (req.body.description) {
+                   filestop.description = req.body.description;
+               }
+               if (req.body.expires && new Date(req.body.expires).getTime() > new Date().getTime()) {
+                   filestop.expires = new Date(req.body.expires);
+               }
                filestop.updated = new Date();
                filestop.save(function(err) {
                   if (err) {
