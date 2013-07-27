@@ -251,7 +251,11 @@ angular.module('filestop.controllers', []).
     }])
     .controller('editDialogCtrl', ['$scope', '$filter', 'dialog', 'filestop', 'filestopApi', function($scope, $filter, dialog, filestop, filestopApi) {
         $scope.filestop = filestop;
-        $scope.expires = $filter('date')($scope.filestop.expires, 'd.MM.y hh:mm:ss');
+        $scope.expires = $filter('date')($scope.filestop.expires, 'd.MM.y HH:mm:ss');
+        $scope.name = $scope.filestop.name;
+        $scope.description = $scope.filestop.description;
+        $scope.keep = $scope.filestop.keep;
+        $scope.error = false;
         $scope.parseDate = function(date) {
             var parts = date.split(' '), d, t;
             if (parts.length != 2) {
@@ -268,9 +272,14 @@ angular.module('filestop.controllers', []).
             var expires = $scope.parseDate($scope.expires);
             filestopApi.update(
                 {
-                    expires: expires
+                    name: $scope.name,
+                    description: $scope.description,
+                    expires: expires,
+                    keep: $scope.keep
                 }, function() {
                     dialog.close(true);
+                }, function(err) {
+                    $scope.error = "Could not save: " + err.data.message;
                 });
         };
         $scope.cancel = function() {

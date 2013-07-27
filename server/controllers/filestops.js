@@ -1,7 +1,25 @@
 var mongoose = require('mongoose'),
     File = mongoose.model('File'),
     Error = require ("errno-codes"),
-    Filestop = mongoose.model('Filestop');
+    Filestop = mongoose.model('Filestop'),
+    deleteExpired;
+
+deleteExpired = function(config) {
+    var now = new Date();
+    Filestop.find({expires: { $lt: now }, keep: false}, function (err, result) {
+        if (result) {
+            result.forEach (function (filestop) {
+                var expires = filestop.expires;
+                if (expires.getTime() < now.getTime()) {
+                    console.log("Delete expired filestop " + filestop.cid);
+                    filestop.deleteAllFileModels();
+                    filestop.deleteFolder(config);
+                    filestop.remove();
+                }
+            });
+        }
+    });
+};
 
 module.exports = function (config) {
     var exports = {};
@@ -19,6 +37,7 @@ module.exports = function (config) {
                 res.send({success: 'OK', cid: filestop.cid});
             }
         });
+        deleteExpired(config);
     };
     exports.update = function(req, res, next) {
         var cid = req.params.cid;
@@ -36,8 +55,11 @@ module.exports = function (config) {
                if (req.body.description) {
                    filestop.description = req.body.description;
                }
-               if (req.body.expires && new Date(req.body.expires).getTime() > new Date().getTime()) {
+               if (req.body.expires) {
                    filestop.expires = new Date(req.body.expires);
+               }
+               if ('keep' in req.body) {
+                   filestop.keep = req.body.keep;
                }
                filestop.updated = new Date();
                filestop.save(function(err) {
@@ -108,25 +130,6 @@ module.exports = function (config) {
         Filestop.find().exec(function (err, result) {
             res.send(result);
         });
-    };
-    exports.deleteExpired = function(req, res) {
-        var now = new Date();
-        Filestop.find({expires: { $lt: now }}, function (err, result) {
-            if (result) {
-                result.forEach (function (filestop) {
-                    var expires = filestop.expires;
-                    if (expires.getTime() == filestop.created.getTime()) {
-                        expires = new Date(filestop.created.getTime() + config.defaultExpireOffset * 1000);
-                    }
-                    if (expires.getTime() < now.getTime()) {
-                        filestop.deleteAllFileModels();
-                        filestop.deleteFolder(config);
-                        filestop.remove();
-                    }
-                });
-            }
-        });
-        res.send(200);
     };
     return exports;
 };

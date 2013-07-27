@@ -2,11 +2,31 @@
     <h3>Settings</h3>
 </div>
 <div class="modal-body">
+    <div class="alert" ng-show="error"><button type="button" class="close" data-dismiss="alert">&times;</button>{{error}}</div>
     <form class="form-horizontal">
+        <div class="control-group">
+            <label class="control-label" for="inputName">Name</label>
+            <div class="controls">
+                <input type="text" id="inputName" ng-model="name" />
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="inputDescription">Description</label>
+            <div class="controls">
+                <textarea type="text" id="inputDescription" ng-model="description" />
+            </div>
+        </div>
         <div class="control-group">
             <label class="control-label" for="inputExpires">Expires</label>
             <div class="controls">
                 <input type="text" id="inputExpires" ng-model="expires" />
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="controls">
+                <label class="checkbox">
+                    <input type="checkbox" ng-model="keep"/>Keep forever
+                </label>
             </div>
         </div>
     </form>

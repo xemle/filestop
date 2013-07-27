@@ -38,7 +38,14 @@ module.exports = function (config) {
             var result = new Date();
             result.setTime(result.getTime() + config.defaultExpireOffset * 1000);
             return result;
-        }}
+        }, validate: [function(value) {
+            if (!value) {
+                return false;
+            }
+            var expired = value.getTime(), now = new Date().getTime(), max = new Date(now + config.maxExpireOffset * 1000).getTime();
+            return expired > now && expired < max;
+        }, "Expiration date must be in the future"]},
+        keep: { type: Boolean, default: false }
     }, {
         toJSON: {
             virtuals: true

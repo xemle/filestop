@@ -51,7 +51,7 @@
         <div class="row-fluid">
             <div >
                 <p>Created on: {{filestop.created | date:'d. MMM y'}}</p>
-                <p ng-style="expireStyle()">Expires on: {{expireDate('d. MMM y')}}</p>
+                <p ng-style="expireStyle()" ng-show="!filestop.keep">Expires on: {{expireDate('d. MMM y')}}</p>
                 <p>Last update: {{filestop.updated | prettyDate}}</p>
                 <p><a class="btn" ng-click="openDialog()">Settings</a></p>
             </div>
