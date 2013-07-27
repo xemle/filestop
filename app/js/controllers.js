@@ -233,7 +233,7 @@ angular.module('filestop.controllers', []).
                 backdrop: true,
                 keyboard: true,
                 backdropClick: true,
-                templateUrl: '../partials/editDialog.html',
+                templateUrl: 'partials/editDialog.html',
                 controller: 'editDialogCtrl',
                 resolve: {
                     filestop: function() { return $scope.filestop },
