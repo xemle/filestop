@@ -33,8 +33,7 @@ module.exports = function (config) {
         var shasum = crypto.createHash('sha1');
         this.cid = shasum.update (this._id + config.salt, "ascii")
             .digest("base64")
-            .replace('+','')
-            .replace('/','')
+            .replace(/[\+\/]/g,'')
             .substring(0,12);
     }
 
