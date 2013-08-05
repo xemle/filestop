@@ -285,4 +285,14 @@ angular.module('filestop.controllers', []).
         $scope.cancel = function() {
             dialog.close();
         }
+    }])
+    .controller('languageCtrl', ['$scope', '$translate', function ($scope, $translate) {
+
+        $scope.changeLang = function (key) {
+            $translate.uses(key).then(function (key) {
+                console.log("Changed language to " + key);
+            }, function (key) {
+                console.log("Could not change language to " + key);
+            });
+        };
     }]);
