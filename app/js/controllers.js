@@ -107,23 +107,19 @@ angular.module('filestop.controllers', []).
         };
 
         // file selection handling
-        $scope.allSelected = false;
+        $scope.selection = { all: false }
         $scope.selectAll = function() {
+            var selected = $scope.selection.all;
             for (var i in $scope.files) {
-                $scope.files[i].selected = $scope.allSelected;
+                $scope.files[i].selected = selected;
             }
         };
         $scope.checkSelected = function() {
-            var allSelected = true, allDeselected = true;
+            var allSelected = true;
             for (var i in $scope.files) {
                 allSelected = allSelected && $scope.files[i].selected;
-                allDeselected = allDeselected && !$scope.files[i].selected;
             }
-            if (allSelected) {
-                $scope.allSelected = true;
-            } else if (allDeselected) {
-                $scope.allSelected = false;
-            }
+            $scope.selection.all = allSelected;
         };
 
         // Multiple download
@@ -251,6 +247,7 @@ angular.module('filestop.controllers', []).
         // Gallery functions
         $scope.selectImage = function(file) {
             file.selected = !file.selected;
+            $scope.checkSelected();
             return false;
         };
         $scope.thumbnailClass = function(file) {

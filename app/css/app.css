@@ -56,7 +56,8 @@ html, body {
     font-style: italic;
 }
 .thumbnail-selected {
-    background: #dddddd;
+    background: #99C4CC;
+    border-color: #99C4CC;
 }
 .thumbnail-selected:hover {
     background: #0088cc;
