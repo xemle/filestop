@@ -55,3 +55,9 @@ html, body {
     background-color: #eee;
     font-style: italic;
 }
+.thumbnail-selected {
+    background: #dddddd;
+}
+.thumbnail-selected:hover {
+    background: #0088cc;
+}

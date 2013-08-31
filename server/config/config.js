@@ -11,6 +11,9 @@ module.exports = {
         port: 8000,
         defaultExpireOffset: 300, // expire time in seconds: 5 Minutes
         maxExpireOffset: 3600, // max expiration time in seconds: 1 hour
+        bin: {
+            convert: 'convert'
+        }
     },
     production: {
         db: "mongodb://localhost/filestopdb",
@@ -30,5 +33,8 @@ module.exports = {
         port: 8080,
         defaultExpireOffset: 86400 * 90, // expire time in seconds: 60 days
         maxExpireOffset: 86400 * 365, // max expiration time in seconds: 1 year
+        bin: {
+            convert: 'convert'
+        }
     }
 };

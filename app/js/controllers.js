@@ -248,6 +248,17 @@ angular.module('filestop.controllers', []).
         };
         $scope.updateFiles();
 
+        // Gallery functions
+        $scope.selectImage = function(file) {
+            file.selected = !file.selected;
+            return false;
+        };
+        $scope.thumbnailClass = function(file) {
+            if (file.selected) {
+                return 'thumbnail-selected';
+            }
+            return '';
+        }
     }])
     .controller('editDialogCtrl', ['$scope', '$filter', 'dialog', 'filestop', 'filestopApi', function($scope, $filter, dialog, filestop, filestopApi) {
         $scope.filestop = filestop;

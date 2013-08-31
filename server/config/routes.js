@@ -12,6 +12,7 @@ module.exports = function (app, config) {
     var filestops = require('../controllers/filestops')(config);
     var path = config.path || '';
     app.get(path + '/filestop/:cid', filestops.get);
+    app.get(path + '/filestop/:cid/files/:fileCid/preview', files.preview);
     app.get(path + '/filestop/:cid/files/:fileCid', files.download);
     app.delete(path + '/filestop/:cid/files/:fileCid', files.delete);
     app.get(path + '/filestop/:cid/files', filestops.getFiles);

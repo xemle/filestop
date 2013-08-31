@@ -6,34 +6,46 @@
         <p textable="filestop.description" textable-change="updateFilestop()"></p>
         <p><button type="button" class="btn btn-primary" ng-click="downloadAll()" ng-disabled="files.length == 0">Download All</button></p>
         <p>Your Filestop has {{files.length}} files with {{getTotalFileSize() | prettySize}} in total.</p>
-        <table class="table .table-condensed">
-            <thead>
-            <tr>
-                <th><input ng-click="selectAll()" ng-model="allSelected" type="checkbox" ng-disabled="files.length == 0"/></th>
-                <th>filename</th>
-                <th>size</th>
-                <th>options</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr ng-repeat="file in files">
-                <td><input ng-model="file.selected" ng-click="checkSelected()" type="checkbox"/></td>
-                <td><a ng-href="filestop/{{cid}}/files/{{file.cid}}" title="{{file.filename}}">{{file.filename | filenameLimit}}</a></td>
-                <td>{{file.size | prettySize}}</td>
-                <td>
-                    <button class="btn btn-link" ng-click="removeFile(file.cid)">
-                        <i class="icon-remove"></i>
-                    </button>
-                </td>
-            </tr>
-            <tr ng-repeat="file in uploadFiles">
-                <td></td>
-                <td>{{file.name | filenameLimit}} <i>{{file.status | uploadStatus}}</i></td>
-                <td>{{file.percent}}% of {{file.size | prettySize}}</td>
-                <td></td>
-            </tr>
-            </tbody>
-        </table>
+        <tabset>
+            <tab heading="List">
+                <table class="table .table-condensed">
+                    <thead>
+                    <tr>
+                        <th><input ng-click="selectAll()" ng-model="allSelected" type="checkbox" ng-disabled="files.length == 0"/></th>
+                        <th>filename</th>
+                        <th>size</th>
+                        <th>options</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="file in files">
+                        <td><input ng-model="file.selected" ng-click="checkSelected()" type="checkbox"/></td>
+                        <td><a ng-href="filestop/{{cid}}/files/{{file.cid}}" title="{{file.filename}}">{{file.filename | filenameLimit}}</a></td>
+                        <td>{{file.size | prettySize}}</td>
+                        <td>
+                            <button class="btn btn-link" ng-click="removeFile(file.cid)">
+                                <i class="icon-remove"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr ng-repeat="file in uploadFiles">
+                        <td></td>
+                        <td>{{file.name | filenameLimit}} <i>{{file.status | uploadStatus}}</i></td>
+                        <td>{{file.percent}}% of {{file.size | prettySize}}</td>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </tab>
+            <tab heading="Images">
+                <ul class="thumbnails">
+                    <li ng-repeat="file in files | imageFiles">
+                        <a href="#" class="thumbnail" ng-class="thumbnailClass(file)" ng-click="selectImage(file)" onclick="return false;"><img ng-src="filestop/{{cid}}/files/{{file.cid}}/preview" style="width: 100px; height: 100px" /></a>
+                    </li>
+                </ul>
+            </tab>
+        </tabset>
+
         <p><button type="button" class="btn btn-success" ng-click="downloadSelected()" ng-disabled="disableDownloadButton()">Download selected</button>
         <button type="button" class="btn btn-primary" ng-click="downloadAll()" ng-disabled="files.length == 0">Download All</button></p>
     </div>

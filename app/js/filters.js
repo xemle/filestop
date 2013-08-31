@@ -64,4 +64,20 @@ angular.module('filestop.filters', []).
                 return '';
             }
         }
+    })
+    .filter('imageFiles', function() {
+        return function (files) {
+            if (!files || !files.length) {
+                return files;
+            }
+            var imageExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+            return files.filter(function(file) {
+                if (!file.hasOwnProperty('filename')) {
+                    return false;
+                }
+                var filename = file.filename, ext;
+                ext = filename.substring(filename.lastIndexOf('.') + 1).toLocaleLowerCase();
+                return imageExtensions.indexOf(ext) >= 0;
+            });
+        }
     });

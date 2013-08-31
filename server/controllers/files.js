@@ -183,5 +183,19 @@ module.exports = function (config) {
             });
         });
     };
+
+    exports.preview = function (req, res) {
+        var filestop_cid = req.params.cid;
+        var file_cid = req.params.fileCid;
+
+        File.findOne({cid: file_cid, filestopCId: filestop_cid}, function (err, file) {
+            if (!file) {
+                res.send(404);
+                return;
+            }
+            var preview = require('../lib/previewutil')(config);
+            preview.sendSquare(res, file, 100);
+        });
+    };
     return exports;
 }
