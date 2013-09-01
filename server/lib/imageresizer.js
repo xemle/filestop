@@ -39,7 +39,7 @@ module.exports = function (config) {
      * @param successCb Callback for success
      */
     exports.square= function(source, target, size, errorCb, successCb) {
-        var args = [source, '-resize', size + '^', '-extent', size, '-gravity', 'center', '-auto-orient', '-strip', '-interlace', 'plane', '-quality', '85', target];
+        var args = [source, '-resize', size + 'x' + size + '^', '-auto-orient', '-extent', size + 'x' + size, '-gravity', 'center', '-strip', '-interlace', 'plane', '-quality', '85', target];
         convert(args, errorCb, successCb);
     };
     return exports;
