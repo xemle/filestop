@@ -28,16 +28,17 @@ module.exports = function (app, config) {
 
     // user routes
     app.get('/users', auth, users.list);
+    app.post('/users/signup', users.signup);
     // route to check whether the user is logged in
     app.get('/loggedin', function(req, res) {
         res.send(req.isAuthenticated() ? req.user : '0');
     })
     // route to log in
-    app.post('/login', passport.authenticate('local'), function (req, res) {
+    app.post('/users/login', passport.authenticate('local'), function (req, res) {
         res.send(req.user);
     })
     // route to log out
-    app.post('/logout', function(req, res) {
+    app.get('/users/logout', function(req, res) {
         req.logOut();
         res.send(200);
     })

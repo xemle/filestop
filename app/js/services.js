@@ -65,4 +65,47 @@ angular.module('filestop').factory('UploadService', function($rootScope) {
         plupload.init(uploader);
     };
     return service;
-});
+}]).factory('userService', ['$rootScope', '$http', '$q', function($rootScope, $http, $q) {
+        var _user = null;
+        return {
+            login: function(user) {
+                var deferred = $q.defer();
+                $http.post('/users/login', user)
+                    .success(function(user) {
+                        _user = user;
+                        deferred.resolve(user);
+                    })
+                    .error(function(data) {
+                        deferred.reject();
+                    });
+                return deferred.promise;
+            },
+            logout: function() {
+                var deferred = $q.defer();
+                $http.get('/users/logout')
+                    .success(function() {
+                        _user = null;
+                        deferred.resolve();
+                    })
+                    .error(function(data) {
+                        deferred.reject();
+                    });
+                return deferred.promise;
+            },
+            loggedin: function() {
+                return (_user != null);
+            },
+            signup: function(user) {
+                var deferred = $q.defer();
+                $http.post('/users/signup', user)
+                    .success(function(user) {
+                        _user = user;
+                        deferred.resolve();
+                    })
+                    .error(function(data) {
+                        deferred.reject();
+                    });
+                return deferred.promise;
+            }
+        };
+    }]);

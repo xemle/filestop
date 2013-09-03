@@ -19,6 +19,16 @@ module.exports = function (config) {
         });
     };
     */
-
+    exports.signup = function(req, res) {
+        var user = new User({email: req.body.email});
+        user.passwordHash = user.createPasswordHash(req.body.password);
+        user.save(function(err) {
+            if (err) {
+                res.send(505);
+            } else {
+                res.send(200);
+            }
+        })
+    };
     return exports;
 }

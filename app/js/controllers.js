@@ -1,8 +1,6 @@
-'use strict';
-
 /* Controllers */
 angular.module('filestop.controllers', []).
-    controller('homeCtrl', ["$scope", "$location", "$http", "$resource", "$routeParams", function ($scope, $location, $http, $resource, $routeParams) {
+    controller('homeCtrl', ["$scope", "$location", "$http", "$resource", "userService", function ($scope, $location, $http, $resource, userService) {
         $scope.filestopApi = $resource('filestop/:cid', { },
             {
                 remove: {method: 'DELETE'}
@@ -45,6 +43,12 @@ angular.module('filestop.controllers', []).
                 });
         };
 
+        $scope.loggedin = userService.loggedin();
+        $scope.logout = function() {
+            userService.logout().then(function() {
+                $location.path('/');
+            });
+        }
     }])
     .controller('filestopCtrl', ["$scope", "$routeParams", "$location", "$http", "$resource", "UploadService", "$filter", "$dialog", function ($scope, $routeParams, $location, $http, $resource, uploadService, $filter, $dialog) {
         var filestopCid = $routeParams.cid;
@@ -284,5 +288,27 @@ angular.module('filestop.controllers', []).
         };
         $scope.cancel = function() {
             dialog.close();
+        }
+    }])
+    .controller('loginCtrl', ['$scope', '$location', 'userService', function($scope, $location, userService) {
+        $scope.error = false;
+        $scope.login = function() {
+            userService.login({username: $scope.email, password: $scope.password})
+                .then(function(user) {
+                    $location.path('home');
+                }, function() {
+                    $scope.error = "Could not sign in";
+                });
+        }
+    }])
+    .controller('signupCtrl', ['$scope', '$location', 'userService', function($scope, $location, userService) {
+        $scope.error = false;
+        $scope.save = function() {
+            userService.signup({email: $scope.email, password: $scope.password})
+                .then(function(user) {
+                    $location.path('home');
+                }, function() {
+                    $scope.error = "Could not sign up"
+                });
         }
     }]);
