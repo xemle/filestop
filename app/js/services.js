@@ -95,6 +95,12 @@ angular.module('filestop').factory('UploadService', function($rootScope) {
             loggedin: function() {
                 return (_user != null);
             },
+            getUsername: function() {
+                if (_user) {
+                    return _user.email;
+                }
+                return null;
+            },
             signup: function(user) {
                 var deferred = $q.defer();
                 $http.post('/users/signup', user)

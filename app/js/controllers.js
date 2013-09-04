@@ -42,13 +42,6 @@ angular.module('filestop.controllers', []).
                     alert("Could not create a new filestop");
                 });
         };
-
-        $scope.loggedin = userService.loggedin();
-        $scope.logout = function() {
-            userService.logout().then(function() {
-                $location.path('/');
-            });
-        }
     }])
     .controller('filestopCtrl', ["$scope", "$routeParams", "$location", "$http", "$resource", "UploadService", "$filter", "$dialog", function ($scope, $routeParams, $location, $http, $resource, uploadService, $filter, $dialog) {
         var filestopCid = $routeParams.cid;
@@ -288,6 +281,15 @@ angular.module('filestop.controllers', []).
         };
         $scope.cancel = function() {
             dialog.close();
+        }
+    }])
+    .controller('userCtrl', ['$scope', 'userService', function($scope, userService) {
+        $scope.loggedin = userService.loggedin;
+        $scope.getUsername = userService.getUsername;
+        $scope.logout = function() {
+            userService.logout().then(function() {
+                $location.path('/');
+            });
         }
     }])
     .controller('loginCtrl', ['$scope', '$location', 'userService', function($scope, $location, userService) {
