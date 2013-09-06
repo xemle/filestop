@@ -28,14 +28,21 @@
 <div class="container">
     <div ng-controller="userCtrl" ng-init="fetchUser()">
         <div class="row-fluid">
-            <div class="span12 text-right" ng-show="!loggedin()">
-                <a href="#/login">Login</a> | <a href="#/signup">Sign up</a>
-            </div>
-            <div class="span12 dropdown" ng-show="loggedin()">
-                <a class="dropdown-toggle" ng-bind="getUsername()"></a>
-                <ul class="dropdown-menu">
-                    <li><a href="#/filestops">Filestops</a></li>
-                    <li><a href="#" ng-click="logout()">Logout</a></li>
+            <div class="span12" >
+                <ul class="nav nav-pills pull-right">
+                    <li ng-show="!loggedin()"><a href="#/login">Login</a></li>
+                    <li ng-show="!loggedin()"><a href="#/signup">Sign up</a></li>
+                    <li class="dropdown" ng-show="loggedin()">
+                        <a class="dropdown-toggle" href="#">
+                            {{getUsername()}}
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#/filestops">My Filestops</a></li>
+                        </ul>
+                    </li>
+                    <li ng-show="loggedin()"><a href="#" ng-click="logout()">Logout</a></li>
+                    </li>
                 </ul>
             </div>
         </div>
