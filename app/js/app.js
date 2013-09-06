@@ -40,6 +40,7 @@ angular.module('filestop', ['filestop.filters', 'filestop.services', 'filestop.d
             }
         });
         $routeProvider.when('/home', {templateUrl: 'partials/home.html', controller: 'homeCtrl'});
+        $routeProvider.when('/filestops', {templateUrl: 'partials/filestops.html', controller: 'filestopsCtrl'});
         $routeProvider.when('/filestop/:cid', {templateUrl: 'partials/filestop.html', controller: 'filestopCtrl'});
         $routeProvider.when('/signup', {templateUrl: 'partials/signup.html', controller: 'signupCtrl'});
         $routeProvider.when('/login', {templateUrl: 'partials/login.html', controller: 'loginCtrl'});

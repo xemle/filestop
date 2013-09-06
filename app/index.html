@@ -26,13 +26,17 @@
 <body id="dropzone">
 
 <div class="container">
-    <div ng-controller="userCtrl" >
+    <div ng-controller="userCtrl" ng-init="fetchUser()">
         <div class="row-fluid">
             <div class="span12 text-right" ng-show="!loggedin()">
                 <a href="#/login">Login</a> | <a href="#/signup">Sign up</a>
             </div>
-            <div class="span12 text-right" ng-show="loggedin()">
-                <a href="#" ng-click="logout()">Logout</a> (<span ng-bind="getUsername()"></span>)
+            <div class="span12 dropdown" ng-show="loggedin()">
+                <a class="dropdown-toggle" ng-bind="getUsername()"></a>
+                <ul class="dropdown-menu">
+                    <li><a href="#/filestops">Filestops</a></li>
+                    <li><a href="#" ng-click="logout()">Logout</a></li>
+                </ul>
             </div>
         </div>
     </div>

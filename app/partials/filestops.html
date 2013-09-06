@@ -1,0 +1,30 @@
+<div ng-init="fetchFilestops()" class="row-fluid">
+    <!-- filestops -->
+    <div class="span12">
+        <h1>Your filestops</h1>
+        <p>You have {{filestops.length}} filestops</p>
+        <table class="table .table-condensed">
+            <thead>
+            <tr>
+                <th><input ng-click="selectAll()" ng-model="allSelected" type="checkbox" ng-disabled="filestops.length == 0"/></th>
+                <th>filename</th>
+                <th>options</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="filestop in filestops">
+                <td><input ng-model="filestop.selected" ng-click="checkSelected()" type="checkbox"/></td>
+                <td><a ng-href="#/filestop/{{filestop.cid}}" title="{{filestop.name}}">{{filestop.name | filenameLimit}}</a></td>
+                <td>
+                    <button class="btn btn-link" ng-click="removeFilestop(filestop.cid)">
+                        <i class="icon-remove"></i>
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span12"><p><a href="#/">Back</a> to create new filestop. <a href="https://github.com/xemle/filestop">Source</a> available at GitHub</p></div>
+</div>

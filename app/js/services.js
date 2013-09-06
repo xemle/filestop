@@ -101,6 +101,22 @@ angular.module('filestop').factory('UploadService', function($rootScope) {
                 }
                 return null;
             },
+            fetchUser: function() {
+                var deferred = $q.defer();
+                $http.get('loggedin')
+                    .success(function(user) {
+                        if (user !== '0') {
+                            _user = user;
+                        } else {
+                            _user = null;
+                        }
+                        deferred.resolve();
+                    })
+                    .error(function(data) {
+                        deferred.reject();
+                    });
+                return deferred.promise;
+            },
             signup: function(user) {
                 var deferred = $q.defer();
                 $http.post('/users/signup', user)

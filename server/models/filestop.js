@@ -4,8 +4,7 @@ var mongoose = require('mongoose'),
     fs = require('fs'),
     path = require('path'),
     deleteFolderRecursive,
-    File = mongoose.model('File'),
-    filestopSchema;
+    File = mongoose.model('File');
 
 deleteFolderRecursive = function(dir) {
     if (fs.existsSync(dir)) {
@@ -24,7 +23,7 @@ deleteFolderRecursive = function(dir) {
 };
 
 module.exports = function (config) {
-    filestopSchema = new Schema({
+    var filestopSchema = new Schema({
         name: { type: String, validate: [function(value) {
             return value && value.length > 3;
         }, "Name is to short"], default: "Unnamed" },
@@ -45,7 +44,8 @@ module.exports = function (config) {
             var expired = value.getTime(), now = new Date().getTime(), max = new Date(now + config.maxExpireOffset * 1000).getTime();
             return expired > now && expired < max;
         }, "Expiration date must be in the future"]},
-        keep: { type: Boolean, default: false }
+        keep: { type: Boolean, default: false },
+        userId: { type: String }
     }, {
         toJSON: {
             virtuals: true

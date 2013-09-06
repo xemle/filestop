@@ -16,7 +16,7 @@ fs.readdirSync(models_path).forEach(function (file) {
 var app = express();
 require('./config/express')(app, config);
 require('./config/routes')(app, config);
-require('./config/passport')();
+require('./config/auth')();
 
 app.listen(config.port, function(){
     console.log("Filestop server listening on port %d in %s mode", this.address().port, env);

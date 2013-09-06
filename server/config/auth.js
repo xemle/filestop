@@ -12,7 +12,7 @@ module.exports = function() {
             if (err) {
                 return done(err, false, { message: 'User with email ' + email + ' not found'});
             }
-            done(err, {email: user.email});
+            done(err, user);
         })
     });
 

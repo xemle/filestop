@@ -3,7 +3,7 @@ var mongoose = require('mongoose'),
     crypto = require('crypto');
 
 module.exports = function (config) {
-    userSchema = new Schema({
+    var userSchema = new Schema({
         email: { type: String },
         passwordHash: { required: true, type: String },
         created: { type: Date, default: Date.now }

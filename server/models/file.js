@@ -2,11 +2,10 @@ var mongoose = require('mongoose'),
     fs = require('fs'),
     path = require('path'),
     Schema = mongoose.Schema,
-    crypto = require('crypto'),
-    fileSchema;
+    crypto = require('crypto');
 
 module.exports = function (config) {
-    fileSchema = new Schema({
+    var fileSchema = new Schema({
         filename: { type: String, validate: [function(value) {
             return value && value.length > 3;
         }, "Filename is to short"] },

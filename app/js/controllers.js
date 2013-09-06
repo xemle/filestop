@@ -43,6 +43,19 @@ angular.module('filestop.controllers', []).
                 });
         };
     }])
+    .controller('filestopsCtrl', ['$scope', '$http', '$q', function($scope, $http, $q) {
+        $scope.filestops = [];
+        $scope.fetchFilestops = function() {
+            var deffered = $q.defer();
+            $http.get('filestop').success(function(data) {
+                $scope.filestops = data;
+                deffered.resolve();
+            }).error(function() {
+                deffered.reject()
+                });
+            return deffered.promise;
+        }
+    }])
     .controller('filestopCtrl', ["$scope", "$routeParams", "$location", "$http", "$resource", "UploadService", "$filter", "$dialog", function ($scope, $routeParams, $location, $http, $resource, uploadService, $filter, $dialog) {
         var filestopCid = $routeParams.cid;
         $scope.filestopApi = $resource('filestop/:cid', {cid: $routeParams.cid},
@@ -286,6 +299,7 @@ angular.module('filestop.controllers', []).
     .controller('userCtrl', ['$scope', 'userService', function($scope, userService) {
         $scope.loggedin = userService.loggedin;
         $scope.getUsername = userService.getUsername;
+        $scope.fetchUser = userService.fetchUser;
         $scope.logout = function() {
             userService.logout().then(function() {
                 $location.path('/');

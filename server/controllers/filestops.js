@@ -29,6 +29,9 @@ module.exports = function (config) {
 
         filestop.createClientId(config);
         filestop.url = config.baseURL + "/#/filestop/" + filestop.cid;
+        if (req.isAuthenticated()) {
+            filestop.userId = req.user.id;
+        }
 
         filestop.save(function (err) {
             if (err) {
@@ -131,5 +134,14 @@ module.exports = function (config) {
             res.send(result);
         });
     };
+    exports.findAllByUser = function(req, res) {
+        var userId = req.user.id;
+        Filestop.find({userId: userId}).exec(function (err, result) {
+            if (err) {
+                return res.send(404)
+            }
+            res.send(result);
+        });
+    }
     return exports;
 };

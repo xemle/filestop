@@ -15,6 +15,12 @@ module.exports = function (app, config) {
 
     var path = config.path || '';
 
+    app.get(path + '/filestop', function(req, res, next) {
+        if (req.isAuthenticated()) {
+            return filestops.findAllByUser(req, res);
+        }
+        return res.send(401);
+    });
     app.get(path + '/filestop/:cid', filestops.get);
     app.get(path + '/filestop/:cid/files/:fileCid', files.download);
     app.delete(path + '/filestop/:cid/files/:fileCid', files.delete);
