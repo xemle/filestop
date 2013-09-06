@@ -30,8 +30,8 @@
         <div class="row-fluid">
             <div class="span12" >
                 <ul class="nav nav-pills pull-right">
-                    <li ng-show="!loggedin()"><a href="#/login">Login</a></li>
-                    <li ng-show="!loggedin()"><a href="#/signup">Sign up</a></li>
+                    <li ng-show="!loggedin()"><a href="#" ng-click="openLoginDialog()">Login</a></li>
+                    <li ng-show="!loggedin()"><a href="#" ng-click="openSignupDialog()">Sign up</a></li>
                     <li class="dropdown" ng-show="loggedin()">
                         <a class="dropdown-toggle" href="#">
                             {{getUsername()}}

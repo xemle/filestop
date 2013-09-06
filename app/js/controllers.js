@@ -296,7 +296,7 @@ angular.module('filestop.controllers', []).
             dialog.close();
         }
     }])
-    .controller('userCtrl', ['$scope', 'userService', function($scope, userService) {
+    .controller('userCtrl', ['$scope', '$location', '$dialog', 'userService', function($scope, $location, $dialog, userService) {
         $scope.loggedin = userService.loggedin;
         $scope.getUsername = userService.getUsername;
         $scope.fetchUser = userService.fetchUser;
@@ -304,27 +304,57 @@ angular.module('filestop.controllers', []).
             userService.logout().then(function() {
                 $location.path('/');
             });
-        }
+        };
+        $scope.openLoginDialog = function() {
+            var dialog = $dialog.dialog({
+                backdrop: true,
+                keyboard: true,
+                backdropClick: true,
+                templateUrl: 'partials/loginDialog.html',
+                controller: 'loginDialogCtrl'
+            });
+            dialog.open().then(function(){
+                $location.path('home');
+            });
+        };
+        $scope.openSignupDialog = function() {
+            var dialog = $dialog.dialog({
+                backdrop: true,
+                keyboard: true,
+                backdropClick: true,
+                templateUrl: 'partials/signupDialog.html',
+                controller: 'signupDialogCtrl'
+            });
+            dialog.open().then(function(){
+                $location.path('home');
+            });
+        };
     }])
-    .controller('loginCtrl', ['$scope', '$location', 'userService', function($scope, $location, userService) {
+    .controller('loginDialogCtrl', ['$scope', 'userService', 'dialog', function($scope, userService, dialog) {
         $scope.error = false;
         $scope.login = function() {
             userService.login({username: $scope.email, password: $scope.password})
                 .then(function(user) {
-                    $location.path('home');
+                    dialog.close();
                 }, function() {
                     $scope.error = "Could not sign in";
                 });
+        };
+        $scope.cancel = function() {
+            dialog.close();
         }
     }])
-    .controller('signupCtrl', ['$scope', '$location', 'userService', function($scope, $location, userService) {
+    .controller('signupDialogCtrl', ['$scope', 'userService', 'dialog', function($scope, userService, dialog) {
         $scope.error = false;
         $scope.save = function() {
             userService.signup({email: $scope.email, password: $scope.password})
                 .then(function(user) {
-                    $location.path('home');
+                    dialog.close();
                 }, function() {
                     $scope.error = "Could not sign up"
                 });
+        };
+        $scope.cancel = function() {
+            dialog.close();
         }
     }]);
