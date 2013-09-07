@@ -20,6 +20,16 @@ module.exports = function (config) {
     };
     */
     exports.signup = function(req, res) {
+        User.findOne({email: req.body.email}, function (err, result) {
+            if (err) {
+                return;
+            }
+            if (result) {
+                console.log("Cannot signup user '" + req.body.email + "': email already registered!");
+                res.send(409, "Error: email already registered!");
+            }
+        });
+
         var user = new User({email: req.body.email});
         user.passwordHash = user.createPasswordHash(req.body.password);
         user.save(function(err) {
