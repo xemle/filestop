@@ -1,6 +1,9 @@
 <div ng-init="fetchFilestops()" class="row-fluid">
     <!-- filestops -->
     <div class="span12">
+        <p>
+            <button ng-click="newFilestop()" class="btn btn-primary btn-large">Start a new FileStop &raquo;</button>
+        </p>
         <h1>Your filestops</h1>
         <p>You have {{filestops.length}} filestops</p>
         <table class="table .table-condensed">
