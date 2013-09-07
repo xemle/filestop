@@ -65,7 +65,7 @@ angular.module('filestop').factory('UploadService', function($rootScope) {
         plupload.init(uploader);
     };
     return service;
-}]).factory('userService', ['$rootScope', '$http', '$q', function($rootScope, $http, $q) {
+}).factory('userService', ['$rootScope', '$http', '$q', function($rootScope, $http, $q) {
         var _user = null;
         return {
             login: function(user) {
