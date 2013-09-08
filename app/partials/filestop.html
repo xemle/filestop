@@ -4,15 +4,15 @@
         <h2 editable="filestop.name" editable-change="updateFilestop()"></h2>
         <div class="alert">{{'filestop_shareURL' | translate}} <a href="{{filestop.url}}">{{filestop.url}}</a></div>
         <p textable="filestop.description" textable-change="updateFilestop()"></p>
-        <p><button type="button" class="btn btn-primary" ng-click="downloadAll()" ng-disabled="files.length == 0">Download All</button></p>
-        <p>Your Filestop has {{files.length}} files with {{getTotalFileSize() | prettySize}} in total.</p>
+        <p><button type="button" class="btn btn-primary" ng-click="downloadAll()" ng-disabled="files.length == 0">{{ 'button_download_all' | translate }}</button></p>
+        <p>{{'filestop_statistics_1' | translate}} {{files.length}} {{'filestop_statistics_2' | translate}} {{getTotalFileSize() | prettySize}}{{'filestop_statistics_3' | translate}}</p>
         <table class="table .table-condensed">
             <thead>
             <tr>
                 <th><input ng-click="selectAll()" ng-model="allSelected" type="checkbox" ng-disabled="files.length == 0"/></th>
-                <th>filename</th>
-                <th>size</th>
-                <th>options</th>
+                <th>{{'file_name' | translate}}</th>
+                <th>{{'file_size' | translate}}</th>
+                <th>{{'file_options' | translate}}</th>
             </tr>
             </thead>
             <tbody>
@@ -34,30 +34,29 @@
             </tr>
             </tbody>
         </table>
-        <p><button type="button" class="btn btn-success" ng-click="downloadSelected()" ng-disabled="disableDownloadButton()">Download selected</button>
-        <button type="button" class="btn btn-primary" ng-click="downloadAll()" ng-disabled="files.length == 0">Download All</button></p>
+        <p><button type="button" class="btn btn-success" ng-click="downloadSelected()" ng-disabled="disableDownloadButton()">{{ 'button_download_selected' | translate }}</button>
+        <button type="button" class="btn btn-primary" ng-click="downloadAll()" ng-disabled="files.length == 0">{{ 'button_download_all' | translate }}</button></p>
     </div>
 
     <!-- INFO and DROPZONE -->
     <div class="span4">
         <div class="row-fluid">
             <div class="well">
-                <h2>Add Files</h2>
-                <p ng-class="getDropZoneClass()">Drag and drop your files into this window here, to upload files!</p>
-                <p>Use the button to open file dialog</p>
-                <a class="btn" id="pickfiles">Upload Files</a>
+                <h2>{{'info_add_files'|translate}}</h2>
+                <p ng-class="getDropZoneClass()">{{'info_add_files_2'|translate}}</p>
+                <a class="btn" id="pickfiles">{{'info_add_files_upload'|translate}}</a>
             </div>
         </div>
         <div class="row-fluid">
             <div >
-                <p>Created on: {{filestop.created | date:'d. MMM y'}}</p>
-                <p ng-style="expireStyle()" ng-show="!filestop.keep">Expires on: {{expireDate('d. MMM y')}}</p>
-                <p>Last update: {{filestop.updated | prettyDate}}</p>
-                <p><a class="btn" ng-click="openDialog()">Settings</a></p>
+                <p>{{'settings_created'|translate}}: {{filestop.created | date:'d. MMM y'}}</p>
+                <p ng-style="expireStyle()" ng-show="!filestop.keep">{{'settings_expires'|translate}}: {{expireDate('d. MMM y')}}</p>
+                <p>{{'settings_updated'|translate}}: {{filestop.updated | prettyDate}}</p>
+                <p><a class="btn" ng-click="openDialog()">{{'settings'|translate}}</a></p>
             </div>
         </div>
     </div>
 </div>
 <div class="row-fluid">
-    <div class="span12"><p><a href="#/">Back</a> to create new filestop &#9642; <a href="https://github.com/xemle/filestop">Source</a> available at GitHub &#9642; <span ng-controller="languageCtrl"><a href="" ng-click="changeLang('en_US')">en</a> / <a href="" ng-click="changeLang('de_DE')">de</a></span></p></div>
+    <div class="span12"><p><a href="#/">{{'footer_back'|translate}}</a> {{'footer_back_2'|translate}} &#9642; <a href="https://github.com/xemle/filestop">FileStop</a> {{'footer_github'|translate}} &#9642; <span ng-controller="languageCtrl"><a href="" ng-click="changeLang('en_US')">en</a> / <a href="" ng-click="changeLang('de_DE')">de</a></span></p></div>
 </div>
