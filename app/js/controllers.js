@@ -43,7 +43,7 @@ angular.module('filestop.controllers', []).
                 });
         };
     }])
-    .controller('filestopsCtrl', ['$scope', '$http', '$q', function($scope, $http, $q) {
+    .controller('filestopsCtrl', ['$scope', '$http', '$location', '$q', function($scope, $http, $location, $q) {
         $scope.filestops = [];
         $scope.fetchFilestops = function() {
             var deffered = $q.defer();
@@ -54,7 +54,20 @@ angular.module('filestop.controllers', []).
                 deffered.reject()
                 });
             return deffered.promise;
-        }
+        };
+        $scope.newFilestop = function () {
+            console.log('creating new filestop');
+            // TODO move this to the service provider
+            $http({method: 'POST', url: 'filestop'}).
+                success(function (data, status, headers, config) {
+                    console.log('redirecting to the new filestop with cid ' + data.cid);
+                    $location.path('filestop/' + data.cid);
+                }).
+                error(function (data, status, headers, config) {
+                    console.log('error while creating filestop', data);
+                    alert("Could not create a new filestop");
+                });
+        };
     }])
     .controller('filestopCtrl', ["$scope", "$routeParams", "$location", "$http", "$resource", "UploadService", "$filter", "$dialog", function ($scope, $routeParams, $location, $http, $resource, uploadService, $filter, $dialog) {
         var filestopCid = $routeParams.cid;
