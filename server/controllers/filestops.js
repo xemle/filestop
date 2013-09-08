@@ -13,7 +13,7 @@ deleteExpired = function(config) {
                 if (expires.getTime() < now.getTime()) {
                     console.log("Delete expired filestop " + filestop.cid);
                     filestop.deleteAllFileModels();
-                    filestop.deleteFolder(config);
+                    filestop.deleteFolder(config, function() {});
                     filestop.remove();
                 }
             });
