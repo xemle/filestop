@@ -42,6 +42,7 @@ module.exports = function (config) {
         });
         deleteExpired(config);
     };
+
     exports.update = function(req, res, next) {
         var cid = req.params.cid;
 

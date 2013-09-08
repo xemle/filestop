@@ -81,6 +81,7 @@ module.exports = function (config) {
         var filestopPath = config.uploadDir + path.sep + this.cid;
         console.log("Deleting Filestop folder at " + filestopPath);
         deleteFolderRecursive(filestopPath);
+        callback();
     };
 
     mongoose.model('Filestop', filestopSchema);

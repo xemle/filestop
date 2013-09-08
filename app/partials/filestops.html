@@ -10,14 +10,16 @@
             <thead>
             <tr>
                 <th><input ng-click="selectAll()" ng-model="allSelected" type="checkbox" ng-disabled="filestops.length == 0"/></th>
-                <th>filename</th>
-                <th>options</th>
+                <th>Name</th>
+                <th>Expires</th>
+                <th>Delete</th>
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="filestop in filestops">
                 <td><input ng-model="filestop.selected" ng-click="checkSelected()" type="checkbox"/></td>
                 <td><a ng-href="#/filestop/{{filestop.cid}}" title="{{filestop.name}}">{{filestop.name | filenameLimit}}</a></td>
+                <td>{{filestop.expires | prettyDate}}</td>
                 <td>
                     <button class="btn btn-link" ng-click="removeFilestop(filestop.cid)">
                         <i class="icon-remove"></i>

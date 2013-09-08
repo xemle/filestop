@@ -43,7 +43,7 @@ angular.module('filestop.controllers', []).
                 });
         };
     }])
-    .controller('filestopsCtrl', ['$scope', '$http', '$location', '$q', function($scope, $http, $location, $q) {
+    .controller('filestopsCtrl', ['$scope', '$http', '$location', '$resource', '$q', function($scope, $http, $location, $resource, $q) {
         $scope.filestops = [];
         $scope.fetchFilestops = function() {
             var deffered = $q.defer();
@@ -68,6 +68,21 @@ angular.module('filestop.controllers', []).
                     alert("Could not create a new filestop");
                 });
         };
+        $scope.removeFilestop = function(cid) {
+            console.log('Removing filestop ' + cid);
+            $scope.filestopApi = $resource('filestop/:cid', {cid: cid},
+                {
+                    remove: {method: 'DELETE'}
+                });
+
+            $scope.filestopApi.remove({cid: cid}, function() {
+                for (var i = $scope.filestops.length - 1; i >= 0; i--) {
+                    if ($scope.filestops[i].cid == cid) {
+                        $scope.filestops.splice(i, 1);
+                    }
+                }
+            });
+        }
     }])
     .controller('filestopCtrl', ["$scope", "$routeParams", "$location", "$http", "$resource", "UploadService", "$filter", "$dialog", function ($scope, $routeParams, $location, $http, $resource, uploadService, $filter, $dialog) {
         var filestopCid = $routeParams.cid;
