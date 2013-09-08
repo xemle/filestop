@@ -30,7 +30,7 @@
         <div class="row-fluid">
             <div class="span12" >
                 <ul class="nav nav-pills pull-right">
-                    <li ng-show="loggedin()"><strong>{{getUsername()}} |</strong></li>
+                    <li ng-show="loggedin()" class="disabled"><a href="#">{{getUsername()}}</a></li>
                     <li><a href="#/home">Home</a></li>
                     <li ng-show="!loggedin()"><a href="#" ng-click="openLoginDialog()">Login</a></li>
                     <li ng-show="!loggedin()"><a href="#" ng-click="openSignupDialog()">Sign up</a></li>
