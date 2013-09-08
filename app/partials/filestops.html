@@ -19,7 +19,8 @@
             <tr ng-repeat="filestop in filestops">
                 <td><input ng-model="filestop.selected" ng-click="checkSelected()" type="checkbox"/></td>
                 <td><a ng-href="#/filestop/{{filestop.cid}}" title="{{filestop.name}}">{{filestop.name | filenameLimit}}</a></td>
-                <td>{{filestop.expires | prettyDate}}</td>
+                <td ng-show="!filestop.keep">{{filestop.expires | prettyDate}}</td>
+                <td ng-show="filestop.keep">never</td>
                 <td>
                     <button class="btn btn-link" ng-click="removeFilestop(filestop.cid)">
                         <i class="icon-remove"></i>
