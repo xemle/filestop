@@ -27,18 +27,18 @@ module.exports = function (config) {
             if (result) {
                 console.log("Cannot signup user '" + req.body.email + "': email already registered!");
                 res.send(409, "Error: email already registered!");
+            } else {
+                var user = new User({email: req.body.email});
+                user.passwordHash = user.createPasswordHash(req.body.password);
+                user.save(function(err) {
+                    if (err) {
+                        res.send(505);
+                    } else {
+                        res.send(200);
+                    }
+                })
             }
         });
-
-        var user = new User({email: req.body.email});
-        user.passwordHash = user.createPasswordHash(req.body.password);
-        user.save(function(err) {
-            if (err) {
-                res.send(505);
-            } else {
-                res.send(200);
-            }
-        })
     };
     return exports;
 }
