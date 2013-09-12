@@ -70,7 +70,7 @@ angular.module('filestop').factory('UploadService', function($rootScope) {
         return {
             login: function(user) {
                 var deferred = $q.defer();
-                $http.post('/users/login', user)
+                $http.post('users/login', user)
                     .success(function(user) {
                         _user = user;
                         deferred.resolve(user);
@@ -82,7 +82,7 @@ angular.module('filestop').factory('UploadService', function($rootScope) {
             },
             logout: function() {
                 var deferred = $q.defer();
-                $http.get('/users/logout')
+                $http.get('users/logout')
                     .success(function() {
                         _user = null;
                         deferred.resolve();
@@ -119,7 +119,7 @@ angular.module('filestop').factory('UploadService', function($rootScope) {
             },
             signup: function(user) {
                 var deferred = $q.defer();
-                $http.post('/users/signup', user)
+                $http.post('users/signup', user)
                     .success(function(user) {
                         _user = user;
                         deferred.resolve();
