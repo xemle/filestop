@@ -45,7 +45,7 @@ module.exports = function (config) {
             return expired > now && expired < max;
         }, "Expiration date must be in the future"]},
         keep: { type: Boolean, default: false },
-        userId: { type: String }
+        _userId: { type: Schema.Types.ObjectId, ref: 'User' }
     }, {
         toJSON: {
             virtuals: true

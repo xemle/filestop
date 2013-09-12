@@ -1,8 +1,7 @@
 var mongoose = require('mongoose'),
     fs = require('fs'),
     path = require('path'),
-    Schema = mongoose.Schema,
-    crypto = require('crypto');
+    Schema = mongoose.Schema;
 
 module.exports = function (config) {
     var fileSchema = new Schema({
@@ -26,7 +25,7 @@ module.exports = function (config) {
             if (typeof(callback) == "function")
                 callback(err);
         });
-    }
+    };
 
     fileSchema.methods.createClientId = function (config) {
         var shasum = crypto.createHash('sha1');
@@ -34,7 +33,7 @@ module.exports = function (config) {
             .digest("base64")
             .replace(/[\+\/]/g,'')
             .substring(0,12);
-    }
+    };
 
     mongoose.model('File', fileSchema);
-}
+};
