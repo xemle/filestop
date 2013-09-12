@@ -7,11 +7,16 @@ module.exports = function (config) {
 
     convert = function(args, errorCb, successCb) {
         var process = child_process.spawn(config.bin.convert, args);
-        process.on('exit', function () {
-            successCb();
+        process.on('exit', function (code) {
+            if (code === 0) {
+                successCb();
+            } else {
+                console.log("Call " + config.bin.convert + " with " + args.join(', ') + " returned " + code);
+                errorCb();
+            }
         });
         process.on('error', function () {
-            console.log("Failed to call " + bin + " with " + args.join(', '));
+            console.log("Failed to call " + config.bin.convert + " with " + args.join(', '));
             errorCb();
         });
     };
