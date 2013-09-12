@@ -1,12 +1,10 @@
 var mongoose = require('mongoose'),
     fs = require('fs'),
     path = require('path'),
-    Schema = mongoose.Schema,
-    crypto = require('crypto'),
-    fileSchema;
+    Schema = mongoose.Schema;
 
 module.exports = function (config) {
-    fileSchema = new Schema({
+    var fileSchema = new Schema({
         filename: { type: String, validate: [function(value) {
             return value && value.length > 3;
         }, "Filename is to short"] },
@@ -27,7 +25,7 @@ module.exports = function (config) {
             if (typeof(callback) == "function")
                 callback(err);
         });
-    }
+    };
 
     fileSchema.methods.createClientId = function (config) {
         var shasum = crypto.createHash('sha1');
@@ -35,7 +33,7 @@ module.exports = function (config) {
             .digest("base64")
             .replace(/[\+\/]/g,'')
             .substring(0,12);
-    }
+    };
 
     mongoose.model('File', fileSchema);
-}
+};

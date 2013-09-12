@@ -1,8 +1,6 @@
-'use strict';
-
 /* Controllers */
 angular.module('filestop.controllers', []).
-    controller('homeCtrl', ["$scope", "$location", "$http", "$resource", "$routeParams", function ($scope, $location, $http, $resource, $routeParams) {
+    controller('homeCtrl', ["$scope", "$location", "$http", "$resource", "userService", function ($scope, $location, $http, $resource, userService) {
         $scope.filestopApi = $resource('filestop/:cid', { },
             {
                 remove: {method: 'DELETE'}
@@ -44,7 +42,47 @@ angular.module('filestop.controllers', []).
                     alert("Could not create a new filestop");
                 });
         };
+    }])
+    .controller('filestopsCtrl', ['$scope', '$http', '$location', '$resource', '$q', function($scope, $http, $location, $resource, $q) {
+        $scope.filestops = [];
+        $scope.fetchFilestops = function() {
+            var deffered = $q.defer();
+            $http.get('filestop').success(function(data) {
+                $scope.filestops = data;
+                deffered.resolve();
+            }).error(function() {
+                deffered.reject()
+                });
+            return deffered.promise;
+        };
+        $scope.newFilestop = function () {
+            console.log('creating new filestop');
+            // TODO move this to the service provider
+            $http({method: 'POST', url: 'filestop'}).
+                success(function (data, status, headers, config) {
+                    console.log('redirecting to the new filestop with cid ' + data.cid);
+                    $location.path('filestop/' + data.cid);
+                }).
+                error(function (data, status, headers, config) {
+                    console.log('error while creating filestop', data);
+                    alert("Could not create a new filestop");
+                });
+        };
+        $scope.removeFilestop = function(cid) {
+            console.log('Removing filestop ' + cid);
+            $scope.filestopApi = $resource('filestop/:cid', {cid: cid},
+                {
+                    remove: {method: 'DELETE'}
+                });
 
+            $scope.filestopApi.remove({cid: cid}, function() {
+                for (var i = $scope.filestops.length - 1; i >= 0; i--) {
+                    if ($scope.filestops[i].cid == cid) {
+                        $scope.filestops.splice(i, 1);
+                    }
+                }
+            });
+        }
     }])
     .controller('filestopCtrl', ["$scope", "$routeParams", "$location", "$http", "$resource", "UploadService", "$filter", "$dialog", function ($scope, $routeParams, $location, $http, $resource, uploadService, $filter, $dialog) {
         var filestopCid = $routeParams.cid;
@@ -288,6 +326,68 @@ angular.module('filestop.controllers', []).
                     dialog.close(true);
                 }, function(err) {
                     $scope.error = "Could not save: " + err.data.message;
+                });
+        };
+        $scope.cancel = function() {
+            dialog.close();
+        }
+    }])
+    .controller('userCtrl', ['$scope', '$location', '$dialog', 'userService', function($scope, $location, $dialog, userService) {
+        $scope.loggedin = userService.loggedin;
+        $scope.getUsername = userService.getUsername;
+        $scope.fetchUser = userService.fetchUser;
+        $scope.logout = function() {
+            userService.logout().then(function() {
+                $location.path('/');
+            });
+        };
+        $scope.openLoginDialog = function() {
+            var dialog = $dialog.dialog({
+                backdrop: true,
+                keyboard: true,
+                backdropClick: true,
+                templateUrl: 'partials/loginDialog.html',
+                controller: 'loginDialogCtrl'
+            });
+            dialog.open().then(function(){
+                $location.path('home');
+            });
+        };
+        $scope.openSignupDialog = function() {
+            var dialog = $dialog.dialog({
+                backdrop: true,
+                keyboard: true,
+                backdropClick: true,
+                templateUrl: 'partials/signupDialog.html',
+                controller: 'signupDialogCtrl'
+            });
+            dialog.open().then(function(){
+                $location.path('home');
+            });
+        };
+    }])
+    .controller('loginDialogCtrl', ['$scope', 'userService', 'dialog', function($scope, userService, dialog) {
+        $scope.error = false;
+        $scope.login = function() {
+            userService.login({username: $scope.email, password: $scope.password})
+                .then(function(user) {
+                    dialog.close();
+                }, function() {
+                    $scope.error = "Could not sign in";
+                });
+        };
+        $scope.cancel = function() {
+            dialog.close();
+        }
+    }])
+    .controller('signupDialogCtrl', ['$scope', 'userService', 'dialog', function($scope, userService, dialog) {
+        $scope.error = false;
+        $scope.save = function() {
+            userService.signup({email: $scope.email, password: $scope.password})
+                .then(function(user) {
+                    dialog.close();
+                }, function() {
+                    $scope.error = "Could not sign up"
                 });
         };
         $scope.cancel = function() {

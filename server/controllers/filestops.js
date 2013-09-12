@@ -13,7 +13,7 @@ deleteExpired = function(config) {
                 if (expires.getTime() < now.getTime()) {
                     console.log("Delete expired filestop " + filestop.cid);
                     filestop.deleteAllFileModels();
-                    filestop.deleteFolder(config);
+                    filestop.deleteFolder(config, function() {});
                     filestop.remove();
                 }
             });
@@ -29,6 +29,9 @@ module.exports = function (config) {
 
         filestop.createClientId(config);
         filestop.url = config.baseURL + "/#/filestop/" + filestop.cid;
+        if (req.isAuthenticated()) {
+            filestop._userId = mongoose.Types.ObjectId(req.user.id);
+        }
 
         filestop.save(function (err) {
             if (err) {
@@ -39,6 +42,7 @@ module.exports = function (config) {
         });
         deleteExpired(config);
     };
+
     exports.update = function(req, res, next) {
         var cid = req.params.cid;
 
@@ -128,6 +132,15 @@ module.exports = function (config) {
     };
     exports.findAll = function(req, res) {
         Filestop.find().exec(function (err, result) {
+            res.send(result);
+        });
+    };
+    exports.findAllByUser = function(req, res) {
+        var userId = mongoose.Types.ObjectId(req.user.id);
+        Filestop.find({_userId: userId}).exec(function (err, result) {
+            if (err) {
+                return res.send(404)
+            }
             res.send(result);
         });
     };

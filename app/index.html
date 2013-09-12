@@ -26,9 +26,22 @@
 <body id="dropzone">
 
 <div class="container">
-
-    <div ng-view>
+    <div ng-controller="userCtrl" ng-init="fetchUser()">
+        <div class="row-fluid">
+            <div class="span12" >
+                <ul class="nav nav-pills pull-right">
+                    <li ng-show="loggedin()" class="disabled"><a href="#">{{getUsername()}}</a></li>
+                    <li><a href="#/home">Home</a></li>
+                    <li ng-show="!loggedin()"><a href="#" ng-click="openLoginDialog()">Login</a></li>
+                    <li ng-show="!loggedin()"><a href="#" ng-click="openSignupDialog()">Sign up</a></li>
+                    <li ng-show="loggedin()"><a href="#/filestops">My Filestops</a></li>
+                    <li ng-show="loggedin()"><a href="#" ng-click="logout()">Logout</a></li>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
+    <div ng-view></div>
 </div>
 
 <script src="js/app.js"></script>

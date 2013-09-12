@@ -1,4 +1,5 @@
-var express = require('express');
+var express = require('express'),
+    passport = require('passport');
 
 module.exports = function (app, config) {
     app.configure(function() {
@@ -20,6 +21,13 @@ module.exports = function (app, config) {
         } else {
             app.use(express.static(__dirname + '/../../app'));
         }
+
+        // passportjs
+        app.use (express.cookieParser());
+        app.use(express.session({ secret: config.salt}));
+        app.use(passport.initialize());
+        app.use(passport.session());
+
         app.use(express.logger());
         app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
         if (config.behindProxy) {
