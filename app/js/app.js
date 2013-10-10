@@ -42,7 +42,9 @@ angular.module('filestop', ['filestop.filters', 'filestop.services', 'filestop.d
         $routeProvider.when('/home', {templateUrl: 'partials/home.html', controller: 'homeCtrl'});
         $routeProvider.when('/filestops', {templateUrl: 'partials/filestops.html', controller: 'filestopsCtrl'});
         $routeProvider.when('/filestop/:cid', {templateUrl: 'partials/filestop.html', controller: 'filestopCtrl'});
-        $routeProvider.when('/signup', {templateUrl: 'partials/signup.html', controller: 'signupCtrl'});
-        $routeProvider.when('/login', {templateUrl: 'partials/login.html', controller: 'loginCtrl'});
+        $routeProvider.when('/signup', {templateUrl: 'partials/signupDialog.html', controller: 'signupDialogCtrl'});
+        $routeProvider.when('/login', {templateUrl: 'partials/loginDialog.html', controller: 'loginDialogCtrl'});
         $routeProvider.otherwise({redirectTo: '/home'});
+
+        jQuery.timeago.settings.allowFuture = true;
     }]);
