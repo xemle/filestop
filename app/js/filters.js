@@ -80,4 +80,10 @@ angular.module('filestop.filters', []).
                 return imageExtensions.indexOf(ext) >= 0;
             });
         }
+    })
+    .filter('encodeURI', function() {
+        return function (input) {
+          return encodeURI(input);
+        }
+
     });

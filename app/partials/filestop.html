@@ -2,7 +2,11 @@
     <!-- FILES -->
     <div class="span8">
         <h2 editable="filestop.name" editable-change="updateFilestop()"></h2>
-        <div class="alert">Share files by sending URL: <a href="{{filestop.url}}">{{filestop.url}}</a></div>
+        <div class="alert">
+          <p>Share files by sharing following URL</p>
+          <p><strong><a href="{{filestop.url}}">{{filestop.url}}</a></strong></p>
+          <a class="btn" href="mailto:?subject=Link%20to%20{{filestop.name | encodeURI}}&body=Hi!%0a%0aI%20like%20to%20share%20some%20files%20from%20%22{{filestop.name | encodeURI}}%22%20with%20you.%20Please%20visit%0a%0a{{filestop.url | encodeURI}}%0a%0ato%20view%20the%20files.%0a%0aBest%20regards">Send link via Email</a>
+        </div>
         <p textable="filestop.description" textable-change="updateFilestop()"></p>
         <p><button type="button" class="btn btn-primary" ng-click="downloadAll()" ng-disabled="files.length == 0">Download All</button></p>
         <p>Your Filestop has {{files.length}} files with {{getTotalFileSize() | prettySize}} in total.</p>
